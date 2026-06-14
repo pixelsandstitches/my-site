@@ -3,12 +3,6 @@ import Landing from './Landing'
 import WeeklyMealPlan from './WeeklyMealPlan'
 import Beachcrest from './beachcrest-google-sites'
 import BeachcrestRedesign from './beachcrest-redesign'
-import Recipes from "./Recipes";
-import RecipeDetail from "./RecipeDetail";
-
-// Inside your router:
-<Route path="/recipes" element={<Recipes />} />
-<Route path="/recipes/:id" element={<RecipeDetail recipeId={useParams().id} />} />
 
 function App() {
   return (
@@ -18,8 +12,6 @@ function App() {
         <Route path="/meal-plan" element={<WeeklyMealPlan />} />
         <Route path="/beachcrest" element={<Beachcrest />} />
         <Route path="/beachcrest-redesign" element={<BeachcrestRedesign />} />
-        <Route path="/recipes" element={<Recipes />} />
-        <Route path="/recipes/:id" element={<RecipeDetail />} />
       </Routes>
     </BrowserRouter>
   )
