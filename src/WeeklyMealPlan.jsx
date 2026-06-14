@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import HomeBanner from './HomeBanner'
 
 // ─── PANTRY DATABASE ───────────────────────────────────────────────────────
 // Locked = confirmed from photo. Assumed = standard pantry staple to verify.
@@ -337,8 +338,8 @@ function PantryPage({ onBack }) {
       <div style={{ background: "#3A5C3E", padding: "2rem 1.5rem 1.5rem", color: "#F5F3EF" }}>
         <button onClick={onBack} style={{ background: "rgba(255,255,255,0.15)", border: "none", color: "#fff", padding: "0.4rem 1rem", borderRadius: 20, cursor: "pointer", fontSize: "0.82rem", marginBottom: "1rem" }}>← Back</button>
         <p style={{ fontSize: "0.72rem", letterSpacing: "0.15em", textTransform: "uppercase", opacity: 0.7, marginBottom: "0.4rem" }}>Pantry Database</p>
-        <h1 style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: "2rem", fontWeight: 700 }}>What You Have</h1>
-        <p style={{ opacity: 0.8, fontSize: "0.85rem", marginTop: "0.5rem" }}>🔒 Locked = confirmed from photo · ○ Assumed = verify not expired</p>
+        <h1 style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: "2rem", fontWeight: 700, color: "#F5F3EF" }}>What You Have</h1>
+        <p style={{ opacity: 0.8, fontSize: "0.85rem", marginTop: "0.5rem" }}>🔒 Locked = confirmed from photo · ○ Assumed = verify not expired · ⚡ = fresh item, use soon</p>
       </div>
       <div style={{ maxWidth: 720, margin: "0 auto", padding: "1.5rem 1.25rem 4rem" }}>
         {categories.map(cat => {
@@ -366,7 +367,6 @@ function PantryPage({ onBack }) {
             </div>
           );
         })}
-        <p style={{ fontSize: "0.74rem", color: "#B8D9C2", textAlign: "center", marginTop: "1rem" }}>⚡ = fresh item, use soon</p>
       </div>
     </div>
   );
@@ -393,11 +393,13 @@ function TodayPage({ onBack }) {
     <div style={{ fontFamily: "'Zilla Slab', serif", background: "#F5F3EF", minHeight: "100vh" }}>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,400&family=Zilla+Slab:wght@300;400;500;600&display=swap'); *{box-sizing:border-box;margin:0;padding:0;} ol{padding-left:1.25rem;}`}</style>
 
+      <HomeBanner />
+
       {/* Header */}
       <div style={{ background: "#3A5C3E", padding: "2rem 1.5rem 1.5rem", color: "#F5F3EF" }}>
         <button onClick={onBack} style={{ background: "rgba(255,255,255,0.15)", border: "none", color: "#fff", padding: "0.4rem 1rem", borderRadius: 20, cursor: "pointer", fontSize: "0.82rem", marginBottom: "1rem" }}>← Meal Plan</button>
         <p style={{ fontSize: "0.72rem", letterSpacing: "0.15em", textTransform: "uppercase", opacity: 0.7, marginBottom: "0.4rem" }}>Today</p>
-        <h1 style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: "2rem", fontWeight: 700, lineHeight: 1.2 }}>{displayDate}</h1>
+        <h1 style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: "2rem", fontWeight: 700, lineHeight: 1.2, color: "#F5F3EF" }}>{displayDate}</h1>
         {!inRange && <p style={{ opacity: 0.7, fontSize: "0.82rem", marginTop: "0.5rem" }}>Showing Sunday's plan — check back during the week</p>}
       </div>
 
@@ -543,6 +545,8 @@ function MealPlanPage({ onNavigate }) {
           .top-btns { flex-direction: column !important; gap: 0.5rem !important; }
         }
       `}</style>
+      
+      <HomeBanner />
 
       {/* Hero */}
       <div style={{ background: "#3A5C3E", padding: "2.5rem 1.5rem 1.75rem", color: "#F5F3EF" }}>
@@ -554,7 +558,7 @@ function MealPlanPage({ onNavigate }) {
               <button className="today-btn" onClick={() => onNavigate("pantry")} style={{ background: "rgba(255,255,255,0.2)", border: "1.5px solid rgba(255,255,255,0.5)", color: "#fff", padding: "0.35rem 0.9rem", borderRadius: 20, cursor: "pointer", fontSize: "0.78rem", fontWeight: 600, transition: "all 0.15s" }}>🧺 Pantry</button>
             </div>
           </div>
-          <h1 className="hero-title" style={{ fontFamily: "'Georgia', serif", fontSize: "2.6rem", fontWeight: 700, lineHeight: 1.15 }}>{WEEK}</h1>
+          <h1 className="hero-title" style={{ fontFamily: "'Georgia', serif", fontSize: "2.6rem", fontWeight: 700, lineHeight: 1.15, color: "#F5F3EF" }}>{WEEK}</h1>
         </div>
       </div>
 

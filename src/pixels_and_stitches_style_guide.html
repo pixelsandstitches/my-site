@@ -1,0 +1,371 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,700;1,9..144,400;1,9..144,700&family=Zilla+Slab:wght@300;400;500;600&display=swap');
+
+  :root {
+    --ps-cactus:    #3A5C3E;
+    --ps-thistle:   #B8A0C8;
+    --ps-taupe:     #CEC8BE;
+    --ps-bark:      #6B5550;
+    --ps-olive:     #8C8C2A;
+    --ps-mint:      #B8D9C2;
+    --ps-bg:        #F5F3EF;
+    --ps-white:     #FAFAF8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .guide {
+    font-family: 'Zilla Slab', serif;
+    background: var(--ps-bg);
+    padding: 2.5rem 2rem;
+    color: var(--ps-cactus);
+  }
+
+  .brand-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.75rem;
+    border-bottom: 1.5px solid var(--ps-mint);
+  }
+
+  .brand-name {
+    font-family: 'Fraunces', serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    font-style: italic;
+    color: var(--ps-cactus);
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+
+  .brand-sub {
+    font-family: 'Zilla Slab', serif;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    color: var(--ps-bark);
+    margin-top: 0.5rem;
+    text-transform: uppercase;
+  }
+
+  .section-label {
+    font-family: 'Zilla Slab', serif;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ps-bark);
+    margin-bottom: 1rem;
+  }
+
+  .section { margin-bottom: 2rem; }
+
+  .divider {
+    height: 1px;
+    background: var(--ps-mint);
+    margin: 1.75rem 0;
+  }
+
+  .palette-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .swatch-wrap { display: flex; flex-direction: column; gap: 5px; }
+  .swatch { height: 60px; border-radius: 6px; }
+  .swatch-primary { height: 76px; border-radius: 6px; }
+
+  .swatch-name {
+    font-family: 'Fraunces', serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--ps-cactus);
+  }
+
+  .swatch-hex { font-family: monospace; font-size: 10px; color: var(--ps-bark); }
+
+  .swatch-role {
+    font-family: 'Zilla Slab', serif;
+    font-size: 10px;
+    color: var(--ps-bark);
+    line-height: 1.4;
+  }
+
+  .badge {
+    display: inline-block;
+    font-size: 8.5px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-left: 5px;
+    vertical-align: middle;
+  }
+
+  .badge-primary { background: var(--ps-cactus); color: var(--ps-taupe); }
+  .badge-accent  { background: var(--ps-thistle); color: #3d2a4a; }
+  .badge-new     { background: var(--ps-bark);    color: #f5f3ef; }
+
+  .role-pills { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 0.85rem; }
+
+  .pill {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-family: 'Zilla Slab', serif;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .type-row { display: flex; flex-direction: column; gap: 1.25rem; }
+
+  .type-specimen {
+    padding: 1.25rem;
+    border-radius: 8px;
+    background: var(--ps-white);
+    border: 1px solid var(--ps-mint);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .type-label {
+    font-family: 'Zilla Slab', serif;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--ps-bark);
+    margin-bottom: 4px;
+  }
+
+  .specimen-display {
+    font-family: 'Fraunces', serif;
+    font-optical-sizing: auto;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ps-cactus);
+    line-height: 1.05;
+  }
+
+  .specimen-display em { font-style: italic; color: var(--ps-thistle); }
+
+  .specimen-display-reg {
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--ps-olive);
+    line-height: 1.2;
+    font-style: italic;
+  }
+
+  .specimen-body {
+    font-family: 'Zilla Slab', serif;
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--ps-cactus);
+    line-height: 1.7;
+  }
+
+  .specimen-utility {
+    font-family: 'Zilla Slab', serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ps-olive);
+  }
+
+  .type-note {
+    font-family: 'Zilla Slab', serif;
+    font-size: 11px;
+    color: var(--ps-bark);
+    margin-top: 4px;
+    line-height: 1.5;
+    border-top: 1px solid var(--ps-mint);
+    padding-top: 8px;
+  }
+
+  .usage-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  .usage-card {
+    border-radius: 8px;
+    padding: 1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .card-a { background: var(--ps-cactus); }
+  .card-b { background: var(--ps-thistle); }
+  .card-c { background: var(--ps-taupe); }
+  .card-d { background: var(--ps-olive); }
+
+  .card-eyebrow {
+    font-family: 'Zilla Slab', serif;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .card-headline {
+    font-family: 'Fraunces', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  .card-a .card-eyebrow { color: var(--ps-mint); }
+  .card-a .card-headline { color: var(--ps-taupe); }
+  .card-b .card-eyebrow { color: #3d2a4a; opacity: 0.65; }
+  .card-b .card-headline { color: #3d2a4a; }
+  .card-c .card-eyebrow { color: var(--ps-bark); }
+  .card-c .card-headline { color: var(--ps-cactus); }
+  .card-d .card-eyebrow { color: var(--ps-mint); opacity: 0.85; }
+  .card-d .card-headline { color: var(--ps-bg); }
+
+  .info-box {
+    background: var(--ps-white);
+    border: 1px solid var(--ps-mint);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    font-family: 'Zilla Slab', serif;
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--ps-bark);
+  }
+
+  .info-box strong { color: var(--ps-cactus); }
+  .info-box em { color: var(--ps-olive); font-style: italic; }
+</style>
+
+<div class="guide">
+
+  <div class="brand-header">
+    <div class="brand-name">Pixels &amp; <em style="color:var(--ps-thistle)">Stitches</em></div>
+    <div class="brand-sub">Brand Style Guide — v3</div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Color Palette</div>
+    <div class="palette-grid">
+
+      <div class="swatch-wrap">
+        <div class="swatch swatch-primary" style="background:#3A5C3E;"></div>
+        <div class="swatch-name">Cactus <span class="badge badge-primary">Primary</span></div>
+        <div class="swatch-hex">#3A5C3E</div>
+        <div class="swatch-role">Backgrounds · headings · anchors</div>
+      </div>
+
+      <div class="swatch-wrap">
+        <div class="swatch swatch-primary" style="background:#B8A0C8;"></div>
+        <div class="swatch-name">Thistle <span class="badge badge-accent">Accent</span></div>
+        <div class="swatch-hex">#B8A0C8</div>
+        <div class="swatch-role">Blue-leaning purple · highlights</div>
+      </div>
+
+      <div class="swatch-wrap">
+        <div class="swatch swatch-primary" style="background:#CEC8BE;"></div>
+        <div class="swatch-name">Taupe</div>
+        <div class="swatch-hex">#CEC8BE</div>
+        <div class="swatch-role">Warm gray neutral · body bg</div>
+      </div>
+
+      <div class="swatch-wrap">
+        <div class="swatch" style="background:#6B5550;"></div>
+        <div class="swatch-name">Bark <span class="badge badge-new">Revised</span></div>
+        <div class="swatch-hex">#6B5550</div>
+        <div class="swatch-role">Cool-toned brown · secondary text</div>
+      </div>
+
+      <div class="swatch-wrap">
+        <div class="swatch" style="background:#8C8C2A;"></div>
+        <div class="swatch-name">Olive Gold</div>
+        <div class="swatch-hex">#8C8C2A</div>
+        <div class="swatch-role">Warm yellow-olive · labels · accents</div>
+      </div>
+
+      <div class="swatch-wrap">
+        <div class="swatch" style="background:#B8D9C2;"></div>
+        <div class="swatch-name">Mint</div>
+        <div class="swatch-hex">#B8D9C2</div>
+        <div class="swatch-role">Dividers · soft backgrounds · UI</div>
+      </div>
+
+    </div>
+
+    <div class="role-pills">
+      <span class="pill" style="background:#3A5C3E; color:#CEC8BE;">Dark anchor</span>
+      <span class="pill" style="background:#B8A0C8; color:#3d2a4a;">Blue thistle</span>
+      <span class="pill" style="background:#6B5550; color:#F5F3EF;">Cool bark</span>
+      <span class="pill" style="background:#8C8C2A; color:#F5F3EF;">Olive gold</span>
+      <span class="pill" style="background:#B8D9C2; color:#3A5C3E;">Mint breath</span>
+      <span class="pill" style="background:#CEC8BE; color:#3A5C3E; border: 1px solid #6B5550;">Taupe neutral</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-label">Typography</div>
+    <div class="type-row">
+
+      <div class="type-specimen">
+        <div class="type-label">Display — Fraunces (Google Fonts · SIL open source)</div>
+        <div class="specimen-display">Pixels &amp; <em>Stitches</em></div>
+        <div class="specimen-display-reg">hand-crafted, pixel by pixel</div>
+        <div class="type-note">Fraunces is an old-style serif with a built-in "wonk" variable axis — its letters carry intentional imperfection that closely mirrors Millie June's hand-drawn character. Use for logos, hero text, pull quotes, and section headers. The italic is especially expressive.</div>
+      </div>
+
+      <div class="type-specimen">
+        <div class="type-label">Body + UI — Zilla Slab (Google Fonts · SIL open source)</div>
+        <div class="specimen-body">Every pattern begins with a single stitch, and every pixel begins with a single point. These are the small decisions that build something worth keeping.</div>
+        <div class="type-note">Zilla Slab is a slab serif with a hand-constructed, slightly irregular texture — the closest Google Fonts analog to the Grocery Font's artisanal feel. Works at every size: body copy, navigation, product tags, and captions.</div>
+      </div>
+
+      <div class="type-specimen">
+        <div class="type-label">Utility / Labels — Zilla Slab 600, tracked</div>
+        <div class="specimen-utility">New Pattern · Digital Download · Maker's Kit</div>
+        <div class="type-note">Same family as body, heavier weight + wide tracking. Covers badges, tags, nav items, and CTAs. No need for a third family.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-label">Color + Type In Context</div>
+    <div class="usage-grid">
+      <div class="usage-card card-a">
+        <div class="card-eyebrow">New Pattern</div>
+        <div class="card-headline">Garden Row Cross Stitch</div>
+      </div>
+      <div class="usage-card card-b">
+        <div class="card-eyebrow">Digital Download</div>
+        <div class="card-headline">Pixel Garden Kit</div>
+      </div>
+      <div class="usage-card card-c">
+        <div class="card-eyebrow">Collection</div>
+        <div class="card-headline">Seasonal Stitches</div>
+      </div>
+      <div class="usage-card card-d">
+        <div class="card-eyebrow">Featured</div>
+        <div class="card-headline">Maker's Workshop</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="info-box">
+    <div class="section-label" style="margin-bottom:0.5rem;">Font Notes</div>
+    <strong>Fraunces</strong> — fonts.google.com/specimen/Fraunces · SIL Open Font License · free for all commercial use including web embedding.<br>
+    <strong>Zilla Slab</strong> — fonts.google.com/specimen/Zilla+Slab · SIL Open Font License · same.<br><br>
+    <em>For print/packaging where you want the original feel: Millie June (Creative Market, Pace Creative) for display; Grocery Font (1924us Studio, Creative Market) for body/labels — verify their web embedding license separately before using in CSS.</em>
+  </div>
+
+</div>

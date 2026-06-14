@@ -1,21 +1,14 @@
 import React, { useState, useEffect } from "react";
 
-// ----------------------------------------------------------------------------
-// Beachcrest Community Association — redesign mockup
-// Coastal South Sound palette, large type for 60s+ audience, plain-language nav.
-// Every piece of content from the existing site has a home. External Drive
-// links are preserved and marked with a small ↗ so people know they leave the site.
-// ----------------------------------------------------------------------------
-
 const COLORS = {
-  tide: "#1f4e5a",      // deep tide-water teal (primary)
+  tide: "#1f4e5a",
   tideDark: "#16383f",
-  dune: "#c98a52",      // warm dune accent
-  sand: "#f3ede2",      // page background, sandy neutral
-  sandCard: "#fbf8f2",  // card background
-  driftwood: "#6b6457", // muted text / labels
-  ink: "#22201c",       // body text
-  line: "#e0d8c8",      // hairline dividers
+  dune: "#c98a52",
+  sand: "#f3ede2",
+  sandCard: "#fbf8f2",
+  driftwood: "#6b6457",
+  ink: "#22201c",
+  line: "#e0d8c8",
 };
 
 const HERO_IMG = "https://beachcrest.org/wp-content/uploads/20190630_152731-1280x720.jpg";
@@ -30,7 +23,6 @@ const NAV = [
   { id: "contact", label: "Contact" },
 ];
 
-// External link helper — marks links that leave the site
 function Ext({ href, children }) {
   return (
     <a href={href} target="_blank" rel="noopener noreferrer" style={{ color: COLORS.tide, fontWeight: 600, textDecoration: "underline", textUnderlineOffset: "3px" }}>
@@ -51,12 +43,10 @@ function SectionTitle({ children, sub }) {
   return (
     <div style={{ marginBottom: 24 }}>
       <h2 style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: 34, lineHeight: 1.1, color: COLORS.tideDark, margin: 0, fontWeight: 600 }}>{children}</h2>
-      {sub && <p style={{ fontSize: 18, color: COLORS.driftwood, marginTop: 10, maxWidth: 640 }}>{sub}</p>}
-    </div>
+      {sub && <p style={{ fontSize: 18, color: COLORS.driftwood, marginTop: 10 }}>{sub}</p>}    </div>
   );
 }
 
-// A labeled card used for navigation and link grouping
 function Card({ title, children, accent }) {
   return (
     <div style={{
@@ -91,16 +81,16 @@ function LinkList({ items }) {
 function Home({ go }) {
   return (
     <>
+      {/* FIX 1: Darker overlay + white text + text shadow */}
       <section style={{ position: "relative", height: 520, overflow: "hidden" }}>
         <img src={HERO_IMG} alt="Beachcrest waterfront on the South Puget Sound" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(22,56,63,0.25) 0%, rgba(22,56,63,0.72) 100%)" }} />
-        <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "0 8% 56px", color: "#fff" }}>
-          <div style={{ textTransform: "uppercase", letterSpacing: "0.22em", fontSize: 14, fontWeight: 700, marginBottom: 14, color: "#f3ede2" }}>A South Sound Private Community</div>
-          <h1 style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: 64, lineHeight: 1.02, margin: 0, fontWeight: 600, maxWidth: 760 }}>Beachcrest</h1>
-          <p style={{ fontSize: 21, maxWidth: 620, marginTop: 16, lineHeight: 1.5, color: "#f3ede2" }}>
-            262 homes nestled west of Nisqually Reach, sharing a half-mile of private beach, a marina, parks, and trails — cared for entirely by the people who live here.
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(10,30,35,0.35) 0%, rgba(10,30,35,0.82) 100%)" }} />
+        <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "0 48px 56px", color: "#fff" }}>
+          <div style={{ textTransform: "uppercase", letterSpacing: "0.22em", fontSize: 14, fontWeight: 700, marginBottom: 14, color: "#f3ede2", textShadow: "0 1px 6px rgba(0,0,0,0.4)" }}>A South Sound Private Community</div>
+          <h1 style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: 64, lineHeight: 1.02, margin: 0, fontWeight: 600, color: "#fff", textShadow: "0 2px 12px rgba(0,0,0,0.5)" }}>Beachcrest</h1>
+          <p style={{ fontSize: 21, marginTop: 16, lineHeight: 1.5, color: "#f3ede2", textShadow: "0 1px 6px rgba(0,0,0,0.4)", textAlign: "center" }}>262 homes nestled west of Nisqually Reach, sharing a half-mile of private beach, a marina, parks, and trails — cared for entirely by the people who live here.
           </p>
-          <div style={{ display: "flex", gap: 14, marginTop: 28, flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: 14, marginTop: 28, flexWrap: "wrap", justifyContent: "center" }}>
             <button onClick={() => go("payments")} style={btnPrimary}>Pay annual dues</button>
             <button onClick={() => go("resources")} style={btnGhost}>Resident resources</button>
           </div>
@@ -110,6 +100,7 @@ function Home({ go }) {
       <Wrap>
         <Eyebrow>Welcome</Eyebrow>
         <SectionTitle>A private community on the water</SectionTitle>
+        {/* FIX 2: prose is left-aligned, maxWidth kept for readability but no centering */}
         <p style={proseLg}>
           The Beachcrest community is nestled just west of Nisqually Reach along the South Puget Sound, in northern Thurston County. Our assets give residents access to a half-mile of private beach, two cabanas for waterfront gatherings, a high-tide marina with 24 leased slips and 21 kayak/canoe rack slots, a boat ramp, mooring buoys, a nature trail, and a playground park with a basketball court.
         </p>
@@ -288,7 +279,7 @@ function Resources() {
                 <span>{f[0]}</span>
                 <span style={{ color: COLORS.dune, fontSize: 22, lineHeight: 1 }}>{open === i ? "–" : "+"}</span>
               </button>
-              {open === i && <p style={{ margin: "0 0 16px", fontSize: 16, lineHeight: 1.6, color: COLORS.ink }}>{f[1]}</p>}
+              {open === i && <p style={{ margin: "0 0 16px", fontSize: 16, lineHeight: 1.6, color: COLORS.ink, textAlign: "left" }}>{f[1]}</p>}
             </div>
           ))}
         </div>
@@ -367,7 +358,7 @@ function News() {
         <div style={{ display: "grid", gap: 22 }}>
           <Card title="What's new on the site" accent={COLORS.dune}>
             <div style={{ fontSize: 13, color: COLORS.driftwood, marginBottom: 8 }}>As of 18 May 2026</div>
-            <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.7 }}>
+            <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.7, textAlign: "left" }}>
               {whatsNew.map((w, i) => <li key={i}>{w}</li>)}
             </ul>
           </Card>
@@ -451,7 +442,7 @@ function Contact() {
         <Card title="Beachcrest Community Association" accent={COLORS.dune}>
           8846 51st Avenue NE<br />Olympia, WA 98516<br />
           <div style={{ margin: "12px 0" }}><strong>(360) 350-3610</strong></div>
-          For cabana beach gatherings, visit Resident Resources and open “Cabana reservations.”
+          For cabana beach gatherings, visit Resident Resources and open "Cabana reservations."
           <div style={{ marginTop: 14, fontSize: 15, color: COLORS.driftwood }}>
             For a board question, leave a message at ext 804.
           </div>
@@ -464,7 +455,7 @@ function Contact() {
 // ---------------------------------------------------------------- Shell
 
 function Wrap({ children }) {
-  return <div style={{ maxWidth: 1080, margin: "0 auto", padding: "56px 24px 72px" }}>{children}</div>;
+  return <div style={{ maxWidth: 1080, margin: "0 auto", padding: "56px 24px 72px", textAlign: "left" }}>{children}</div>;
 }
 
 export default function App() {
@@ -481,15 +472,46 @@ export default function App() {
       document.head.appendChild(l);
     }
     const s = document.createElement("style");
-    s.textContent = `@media (max-width: 760px){ .bc-two{ grid-template-columns: 1fr !important; } .bc-desktop-nav{ display:none !important; } .bc-burger{ display:block !important; } }
-    button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible{ outline: 3px solid ${COLORS.dune}; outline-offset: 2px; }`;
+    s.textContent = `
+      @media (max-width: 760px) {
+        .bc-two { grid-template-columns: 1fr !important; }
+        .bc-desktop-nav { display: none !important; }
+        .bc-burger { display: block !important; }
+      }
+      button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible {
+        outline: 3px solid ${COLORS.dune}; outline-offset: 2px;
+      }
+    `;
     document.head.appendChild(s);
   }, []);
 
-  const PAGES = { home: <Home go={go} />, about: <About />, documents: <Documents />, resources: <Resources />, news: <News />, payments: <Payments />, contact: <Contact /> };
+  const PAGES = {
+    home: <Home go={go} />,
+    about: <About />,
+    documents: <Documents />,
+    resources: <Resources />,
+    news: <News />,
+    payments: <Payments />,
+    contact: <Contact />,
+  };
 
   return (
     <div style={{ fontFamily: "'Inter', system-ui, sans-serif", background: COLORS.sand, color: COLORS.ink, minHeight: "100vh" }}>
+      {/* HomeBanner */}
+      <div style={{
+        background: '#f5f0e8',
+        borderBottom: '0.5px solid #8ab09a',
+        padding: '7px 20px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px',
+      }}>
+        <span style={{ color: '#3a6b52', fontSize: 13 }}>←</span>
+        <a href="/" style={{ color: '#3a6b52', fontSize: 12, letterSpacing: '0.04em', textDecoration: 'none' }}>Pixels & Stitches</a>
+        <span style={{ color: '#8ab09a', fontSize: 11 }}>›</span>
+        <span style={{ color: '#1e4a35', fontWeight: 500, fontSize: 12 }}>Beachcrest Redesign</span>
+      </div>
+
       <header style={{ position: "sticky", top: 0, zIndex: 50, background: COLORS.tide, color: "#fff" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 68 }}>
           <button onClick={() => go("home")} style={{ background: "none", border: "none", cursor: "pointer", color: "#fff", display: "flex", alignItems: "center", gap: 10 }}>
@@ -539,7 +561,8 @@ export default function App() {
 }
 
 // ---------------------------------------------------------------- shared styles
-const proseLg = { fontSize: 18, lineHeight: 1.7, color: COLORS.ink, maxWidth: 720, marginBottom: 18 };
+// FIX 2: Removed textAlign: "center" from proseLg so body text is left-aligned
+const proseLg = { fontSize: 18, lineHeight: 1.7, color: COLORS.ink, marginBottom: 18 };
 const btnPrimary = { background: COLORS.dune, color: "#fff", border: "none", padding: "14px 26px", borderRadius: 8, fontSize: 16.5, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" };
 const btnGhost = { background: "rgba(255,255,255,0.14)", color: "#fff", border: "1px solid rgba(255,255,255,0.5)", padding: "14px 26px", borderRadius: 8, fontSize: 16.5, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" };
 const navCard = { background: COLORS.sandCard, border: `1px solid ${COLORS.line}`, borderRadius: 10, padding: "20px 22px", cursor: "pointer", textAlign: "left", display: "flex", flexDirection: "column", gap: 4, fontFamily: "inherit" };
@@ -548,5 +571,3 @@ const td = { padding: "12px 10px", verticalAlign: "top" };
 const chip = { background: COLORS.sand, border: `1px solid ${COLORS.line}`, borderRadius: 7, padding: "8px 10px", fontSize: 14.5, textAlign: "center", color: COLORS.driftwood };
 const faqBtn = { width: "100%", background: "none", border: "none", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, padding: "16px 0", cursor: "pointer", fontSize: 17, fontWeight: 600, color: COLORS.tideDark, textAlign: "left", fontFamily: "inherit" };
 const input = { padding: "13px 14px", borderRadius: 8, border: `1px solid ${COLORS.line}`, fontSize: 16, fontFamily: "inherit", background: "#fff", color: COLORS.ink };
-
-// navCard hover via inline isn't possible; subtle styling kept intentional and quiet.
