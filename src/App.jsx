@@ -19,7 +19,7 @@ function App() {
         <Route path="/beachcrest" element={<Beachcrest />} />
         <Route path="/beachcrest-redesign" element={<BeachcrestRedesign />} />
         <Route path="/recipes" element={<Recipes />} />
-        <Route path="/recipes/:id" element={<RecipeDetail recipeId={useParams().id} />} />
+        <Route path="/recipes/:id" element={<RecipeDetail />} />
       </Routes>
     </BrowserRouter>
   )

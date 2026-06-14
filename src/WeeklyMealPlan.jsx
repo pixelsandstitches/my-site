@@ -1,15 +1,83 @@
 import { useState } from "react";
 
+// ─── PANTRY DATABASE ───────────────────────────────────────────────────────
+// Locked = confirmed from photo. Assumed = standard pantry staple to verify.
+// approxExpiry: null means pantry staple with no meaningful expiry concern.
+export const pantryDB = [
+  // CONFIRMED FROM THIS WEEK'S HAUL PHOTO
+  { id: "tahini",        name: "TJ's Organic Tahini",           category: "Condiment",  locked: true,  approxExpiry: "2027-06",  note: "New jar from haul" },
+  { id: "soy_sauce",    name: "TJ's Soy Sauce (reduced sodium)",category: "Condiment",  locked: true,  approxExpiry: "2027-12",  note: "New bottle from haul" },
+  { id: "habanero",     name: "TJ's Habanero Hot Sauce",        category: "Condiment",  locked: true,  approxExpiry: "2027-06",  note: "New bottle from haul" },
+  { id: "sweet_chili",  name: "TJ's Sweet Chili Sauce",         category: "Condiment",  locked: true,  approxExpiry: "2027-06",  note: "New bottle from haul" },
+  { id: "truffle_aioli",name: "Truffle Aioli",                  category: "Condiment",  locked: true,  approxExpiry: "2026-09",  note: "New jar from haul" },
+  { id: "pita_chips",   name: "TJ's Pita Chips",                category: "Snack",      locked: true,  approxExpiry: "2026-09",  note: "New bag from haul" },
+  { id: "baguette",     name: "TJ's Artisan Baguette",          category: "Bread",      locked: true,  approxExpiry: "2026-06-17", note: "Fresh — use by Tue/Wed", fresh: true },
+  { id: "plumcots",     name: "Plumcots (Family Tree Farms)",   category: "Produce",    locked: true,  approxExpiry: "2026-06-19", note: "Fresh — eat by midweek", fresh: true },
+  { id: "iranian_crk",  name: "TJ's Iranian-style Crispbread",  category: "Snack",      locked: true,  approxExpiry: "2027-03",  note: "From haul — good for dipping" },
+
+  // CONFIRMED FROM FRIDGE PHOTO (previous session)
+  { id: "tzatziki",     name: "TJ's Tzatziki",                  category: "Condiment",  locked: true,  approxExpiry: "2026-06-28", note: "Confirmed in fridge" },
+  { id: "garlic_dip",   name: "TJ's Garlic Spread-Dip",         category: "Condiment",  locked: true,  approxExpiry: "2026-06-28", note: "Confirmed in fridge" },
+  { id: "labneh",       name: "TJ's Roasted Tomato Labneh Dip", category: "Condiment",  locked: true,  approxExpiry: "2026-06-28", note: "Confirmed in fridge" },
+  { id: "ebagel_dip",   name: "TJ's Everything Bagel Yogurt Dip",category:"Condiment",  locked: true,  approxExpiry: "2026-06-28", note: "Confirmed in fridge" },
+  { id: "salsa_verde",  name: "Herdez Salsa Verde",             category: "Condiment",  locked: true,  approxExpiry: "2027-01",  note: "Confirmed in fridge" },
+  { id: "grillo_spears",name: "Grillo's Pickle Spears",         category: "Condiment",  locked: true,  approxExpiry: "2026-10",  note: "Confirmed in fridge" },
+  { id: "grillo_gallo", name: "Grillo's Pickle de Gallo",       category: "Condiment",  locked: true,  approxExpiry: "2026-08",  note: "Confirmed in fridge" },
+  { id: "pico",         name: "Pico de Gallo (La Mexicana)",    category: "Condiment",  locked: true,  approxExpiry: "2026-06-20", note: "Fresh — use this week", fresh: true },
+  { id: "edamame",      name: "TJ's Shelled Edamame",           category: "Snack",      locked: true,  approxExpiry: "2026-06-20", note: "Confirmed in fridge — 9g protein", fresh: true },
+  { id: "bone_broth",   name: "Chicken Bone Broth",             category: "Pantry",     locked: true,  approxExpiry: "2026-07-24", note: "Confirmed in fridge" },
+  { id: "lime_juice",   name: "Santa Cruz Pure Lime Juice",     category: "Condiment",  locked: true,  approxExpiry: "2026-10",  note: "Confirmed in fridge" },
+  { id: "corn",         name: "Corn on the Cob",                category: "Produce",    locked: true,  approxExpiry: "2026-06-16", note: "Use Sunday!", fresh: true },
+  { id: "mayo",         name: "Best Foods Real Mayonnaise",     category: "Condiment",  locked: true,  approxExpiry: "2027-01",  note: "Value size — confirmed in fridge" },
+  { id: "whole_milk",   name: "Darigold Whole Milk",            category: "Dairy",      locked: true,  approxExpiry: "2026-07-24", note: "Confirmed in fridge" },
+  { id: "green_beans",  name: "Fresh Green Beans",              category: "Produce",    locked: true,  approxExpiry: "2026-06-18", note: "Use early in week", fresh: true },
+
+  // ASSUMED PANTRY STAPLES — verify not expired
+  { id: "olive_oil",    name: "Olive Oil",                      category: "Pantry",     locked: false, approxExpiry: null,       note: "Assumed — check level" },
+  { id: "rice_vinegar", name: "Rice Wine Vinegar",              category: "Pantry",     locked: false, approxExpiry: null,       note: "Assumed — check expiry" },
+  { id: "chili_oil",    name: "Crispy Chili Oil",               category: "Condiment",  locked: false, approxExpiry: null,       note: "Assumed — check level" },
+  { id: "maple_syrup",  name: "Maple Syrup",                    category: "Pantry",     locked: false, approxExpiry: null,       note: "Assumed — check level" },
+  { id: "hot_sauce",    name: "Hot Sauce (generic)",            category: "Condiment",  locked: false, approxExpiry: null,       note: "Assumed — now have habanero too" },
+  { id: "smk_paprika",  name: "Smoked Paprika",                 category: "Spice",      locked: false, approxExpiry: null,       note: "Assumed — check expiry" },
+  { id: "cumin",        name: "Cumin",                          category: "Spice",      locked: false, approxExpiry: null,       note: "Assumed — check expiry" },
+  { id: "garlic_pwd",   name: "Garlic Powder",                  category: "Spice",      locked: false, approxExpiry: null,       note: "Assumed — check expiry" },
+  { id: "kosher_salt",  name: "Kosher Salt",                    category: "Spice",      locked: false, approxExpiry: null,       note: "Assumed" },
+  { id: "blk_pepper",   name: "Black Pepper",                   category: "Spice",      locked: false, approxExpiry: null,       note: "Assumed" },
+  { id: "butter",       name: "Butter",                         category: "Dairy",      locked: false, approxExpiry: null,       note: "Assumed — check level" },
+  { id: "couscous",     name: "Couscous",                       category: "Pantry",     locked: false, approxExpiry: null,       note: "Assumed — check expiry" },
+  { id: "almond_butter",name: "Almond Butter",                  category: "Pantry",     locked: false, approxExpiry: null,       note: "Assumed — check level" },
+];
+
+// ─── WEEK DATA ─────────────────────────────────────────────────────────────
 const WEEK = "June 15 – 21, 2026";
+const WEEK_START = new Date("2026-06-15");
 
 const dayPlan = [
-  { day: "Sun", label: "Sunday", meal: "Skirt Steak + Corn Salad", note: "Cook after paddleboarding", tag: "cook", emoji: "🥩" },
-  { day: "Mon", label: "Monday", meal: "Leftover steak salad", note: "Eat before or after pickleball", tag: "leftover", emoji: "🥗" },
-  { day: "Tue", label: "Tuesday", meal: "Sandwich or skip", note: "Floral arrangements with Brit — eat before", tag: "easy", emoji: "🥪" },
-  { day: "Wed", label: "Wednesday", meal: "Chimichurri Chicken Bowl", note: "Cook tonight — oven does the work", tag: "cook", emoji: "🍗" },
-  { day: "Thu", label: "Thursday", meal: "Leftover chimichurri chicken", note: "Reheat during lunch block", tag: "leftover", emoji: "🍗" },
-  { day: "Fri", label: "Friday", meal: "Al Pastor Romaine Tacos", note: "Juneteenth — open day, zero pressure", tag: "easy", emoji: "🌮" },
-  { day: "Sat", label: "Saturday", meal: "Wild card", note: "Eat out or reset into next week", tag: "free", emoji: "✨" },
+  { day: "Sun", label: "Sunday",    meal: "Skirt Steak + Charred Corn Salad", note: "Cook after paddleboarding. Use the corn before it turns.", tag: "cook",     emoji: "🥩", date: "2026-06-15" },
+  { day: "Mon", label: "Monday",    meal: "Leftover steak salad",              note: "Eat before or after pickleball",                          tag: "leftover", emoji: "🥗", date: "2026-06-16" },
+  { day: "Tue", label: "Tuesday",   meal: "Baguette sandwich",                 note: "Use the baguette — it won't last past today. Brit's evening.", tag: "easy", emoji: "🥖", date: "2026-06-17" },
+  { day: "Wed", label: "Wednesday", meal: "Chimichurri Chicken Bowl",          note: "Cook tonight — oven does the work",                       tag: "cook",     emoji: "🍗", date: "2026-06-18" },
+  { day: "Thu", label: "Thursday",  meal: "Leftover chimichurri chicken",      note: "Reheat during lunch block",                               tag: "leftover", emoji: "🍗", date: "2026-06-19" },
+  { day: "Fri", label: "Friday",    meal: "Al Pastor Romaine Tacos",           note: "Juneteenth — open day, zero pressure",                    tag: "easy",     emoji: "🌮", date: "2026-06-20" },
+  { day: "Sat", label: "Saturday",  meal: "Wild card",                         note: "Eat out or reset into next week",                         tag: "free",     emoji: "✨", date: "2026-06-21" },
+];
+
+const breakfasts = [
+  { name: "Hash brown + fried egg + habanero hot sauce", note: "New hot sauce upgrade — adds kick without effort" },
+  { name: "Hash brown + Everything Bagel yogurt dip", note: "Schmear on top like savory cream cheese" },
+  { name: "Hash brown + tzatziki + fresh romaine", note: "Little breakfast wrap situation" },
+  { name: "Soft scrambled eggs + butter + salt", note: "5 min, ~14g protein for 2 eggs" },
+  { name: "Hash brown + truffle aioli + fried egg", note: "The truffle aioli on eggs is genuinely good — try it" },
+];
+
+const snacks = [
+  { emoji: "🍑", name: "Plumcots",                         why: "Fresh from haul — part plum, part apricot. Eat by midweek before they turn." },
+  { emoji: "🥒", name: "Grillo's pickles + edamame",       why: "Salty crunch combo, 9g protein from edamame. Chip replacement." },
+  { emoji: "🫙", name: "Labneh or truffle aioli + pita chips", why: "You now have both — alternate them so pita chips don't get boring." },
+  { emoji: "☕", name: "Warm mug of bone broth",           why: "Low appetite days — counts as something, supports muscle preservation." },
+  { emoji: "🧀", name: "String cheese or Babybel",         why: "Zero prep, grab-and-go protein." },
+  { emoji: "🥚", name: "Hard boiled eggs (batch Sunday)",  why: "6g protein each. Eat with habanero sauce or truffle aioli for variety." },
+  { emoji: "🫙", name: "Iranian crispbread + garlic dip",  why: "From haul — thin, crunchy, great with any of the TJ's dips." },
 ];
 
 const tagStyles = {
@@ -22,84 +90,77 @@ const tagStyles = {
 const shoppingCategories = [
   {
     name: "🥩 Protein — Buy",
-    color: "#2C4A2E",
-    bg: "#EEF3EC",
+    color: "#2C4A2E", bg: "#EEF3EC",
     items: [
-      { item: "Skirt steak", qty: "~1–1.5 lbs", use: "Sunday cook session", status: "buy" },
-      { item: "Eggs", qty: "1 dozen", use: "Breakfast + hard boiled snacks", status: "buy" },
-      { item: "TJ's deli turkey or rotisserie chicken", qty: "1 pack", use: "Sandwiches", status: "buy" },
+      { item: "Skirt steak",                       qty: "~1–1.5 lbs", use: "Sunday cook session",         status: "buy" },
+      { item: "Eggs",                               qty: "1 dozen",    use: "Breakfast + hard boiled snacks", status: "buy" },
+      { item: "TJ's deli turkey or rotisserie chicken", qty: "1 pack", use: "Tuesday baguette sandwich",   status: "buy" },
     ]
   },
   {
     name: "🧊 Freezer — Confirm",
-    color: "#1565C0",
-    bg: "#E8F0FB",
+    color: "#1565C0", bg: "#E8F0FB",
     items: [
-      { item: "TJ's Chimichurri Chicken Skewers", qty: "1 bag", use: "Wednesday cook session", status: "confirm" },
-      { item: "Al Pastor meat", qty: "1 portion", use: "Friday tacos", status: "confirm" },
+      { item: "TJ's Chimichurri Chicken Skewers", qty: "1 bag",     use: "Wednesday cook session", status: "confirm" },
+      { item: "Al Pastor meat",                   qty: "1 portion", use: "Friday tacos",           status: "confirm" },
     ]
   },
   {
     name: "🌽 Produce — Buy",
-    color: "#827717",
-    bg: "#F9FBE7",
+    color: "#827717", bg: "#F9FBE7",
     items: [
-      { item: "Corn on the cob", qty: "—", use: "Skirt steak salad", status: "have", note: "✓ Already in fridge" },
-      { item: "Avocado", qty: "1–2", use: "Skirt steak salad", status: "buy" },
-      { item: "Lime", qty: "2–3", use: "Salad + al pastor (or use Santa Cruz lime juice)", status: "buy" },
-      { item: "Cherry tomatoes", qty: "1 pint", use: "Chimichurri bowl + snacking", status: "buy" },
+      { item: "Corn on the cob",    qty: "—",      use: "Skirt steak salad — USE SUNDAY",          status: "have", note: "✓ In fridge — use this weekend!" },
+      { item: "Plumcots",           qty: "—",      use: "Snack this week — eat by Wed",            status: "have", note: "✓ From haul — fresh, perishable" },
+      { item: "Avocado",            qty: "1–2",    use: "Skirt steak salad",                       status: "buy" },
+      { item: "Cherry tomatoes",    qty: "1 pint", use: "Chimichurri bowl + snacking",             status: "buy" },
     ]
   },
   {
-    name: "🧺 Pantry — Check Expiry",
-    color: "#C4714A",
-    bg: "#FDF3EE",
+    name: "🧺 Pantry — Locked In From Haul",
+    color: "#C4714A", bg: "#FDF3EE",
     items: [
-      { item: "Couscous", qty: "1 box", use: "Skirt steak salad", status: "check" },
-      { item: "Olive oil", qty: "—", use: "Everything", status: "check" },
-      { item: "Soy sauce", qty: "—", use: "Tahini sauce", status: "check" },
-      { item: "Rice wine vinegar", qty: "—", use: "Tahini sauce", status: "check" },
-      { item: "Tahini", qty: "—", use: "Tahini chili oil sauce", status: "check" },
-      { item: "Crispy chili oil", qty: "—", use: "Tahini sauce", status: "check" },
-      { item: "Maple syrup or honey", qty: "—", use: "Tahini sauce", status: "check" },
-      { item: "Chicken bone broth", qty: "—", use: "Warm mug snack / cooking", status: "have", note: "✓ In fridge" },
-      { item: "Smoked paprika", qty: "—", use: "Seasoning", status: "check" },
-      { item: "Cumin", qty: "—", use: "Al pastor, general", status: "check" },
-      { item: "Hot sauce", qty: "—", use: "Eggs, snacks", status: "check" },
+      { item: "TJ's Organic Tahini",          qty: "New jar",    use: "Tahini chili oil sauce",    status: "have", note: "✓ From haul" },
+      { item: "TJ's Soy Sauce (reduced)",     qty: "New bottle", use: "Tahini sauce + marinades",  status: "have", note: "✓ From haul" },
+      { item: "TJ's Habanero Hot Sauce",      qty: "New bottle", use: "Eggs, snacks, everything",  status: "have", note: "✓ From haul" },
+      { item: "TJ's Sweet Chili Sauce",       qty: "New bottle", use: "Dipping, glazing",          status: "have", note: "✓ From haul" },
+      { item: "Truffle Aioli",                qty: "New jar",    use: "Eggs, baguette, snacks",    status: "have", note: "✓ From haul" },
+      { item: "TJ's Artisan Baguette",        qty: "1 loaf",     use: "Tuesday sandwich — use by Tue", status: "have", note: "✓ From haul — perishable!" },
+      { item: "TJ's Iranian-style Crispbread",qty: "1 pack",     use: "Dipping snack all week",    status: "have", note: "✓ From haul" },
+      { item: "TJ's Pita Chips",              qty: "New bag",    use: "Dipping snack all week",    status: "have", note: "✓ From haul" },
+      { item: "Rice wine vinegar",            qty: "—",          use: "Tahini sauce",              status: "check" },
+      { item: "Crispy chili oil",             qty: "—",          use: "Tahini sauce",              status: "check" },
+      { item: "Maple syrup or honey",         qty: "—",          use: "Tahini sauce",              status: "check" },
+      { item: "Olive oil",                    qty: "—",          use: "Steak salad + cooking",     status: "check" },
+      { item: "Couscous",                     qty: "1 box",      use: "Skirt steak salad",         status: "check" },
     ]
   },
   {
-    name: "🧊 Fridge Condiments — Confirm Not Expired",
-    color: "#6A1B9A",
-    bg: "#F5EEF8",
+    name: "🧊 Fridge Condiments — Confirmed",
+    color: "#6A1B9A", bg: "#F5EEF8",
     items: [
-      { item: "TJ's Tzatziki", qty: "—", use: "Chicken bowl dressing, sandwiches", status: "have", note: "✓ In fridge" },
-      { item: "TJ's Garlic Spread-Dip", qty: "—", use: "Chicken bowl, romaine dip", status: "have", note: "✓ In fridge" },
-      { item: "TJ's Roasted Tomato Labneh Dip", qty: "—", use: "Snack anchor — with pita chips", status: "have", note: "✓ In fridge" },
-      { item: "TJ's Everything Bagel Yogurt Dip", qty: "—", use: "On hash brown at breakfast", status: "have", note: "✓ In fridge" },
-      { item: "Herdez Salsa Verde", qty: "—", use: "Al pastor tacos", status: "have", note: "✓ In fridge" },
-      { item: "Grillo's Pickle Spears", qty: "—", use: "Snack pairing with edamame", status: "have", note: "✓ In fridge" },
+      { item: "TJ's Tzatziki",                 qty: "—", use: "Chicken bowl, baguette sandwich",  status: "have", note: "✓ In fridge" },
+      { item: "TJ's Garlic Spread-Dip",        qty: "—", use: "Chicken bowl, crispbread",         status: "have", note: "✓ In fridge" },
+      { item: "TJ's Roasted Tomato Labneh",    qty: "—", use: "Snack anchor with pita/crispbread",status: "have", note: "✓ In fridge" },
+      { item: "TJ's Everything Bagel Yogurt Dip",qty:"—",use: "Hash brown at breakfast",          status: "have", note: "✓ In fridge" },
+      { item: "Herdez Salsa Verde",            qty: "—", use: "Al pastor tacos",                  status: "have", note: "✓ In fridge" },
+      { item: "Grillo's Pickle Spears + de Gallo",qty:"—",use:"Snacking, al pastor topping",      status: "have", note: "✓ In fridge" },
+      { item: "Pico de Gallo (La Mexicana)",   qty: "—", use: "Al pastor topping — use by Fri",   status: "have", note: "✓ In fridge — use this week!" },
     ]
   },
   {
     name: "🥣 Breakfast — Buy",
-    color: "#BF360C",
-    bg: "#FBE9E7",
+    color: "#BF360C", bg: "#FBE9E7",
     items: [
       { item: "TJ's Hash Browns (frozen)", qty: "1 box", use: "Default breakfast", status: "buy" },
-      { item: "Multigrain bread", qty: "1 loaf", use: "Sandwiches + toast", status: "buy" },
     ]
   },
   {
     name: "🧀 Snacks — Buy",
-    color: "#283593",
-    bg: "#E8EAF6",
+    color: "#283593", bg: "#E8EAF6",
     items: [
-      { item: "TJ's Pita chips", qty: "1 bag", use: "With labneh dip — chip replacement", status: "buy" },
-      { item: "Edamame (shelled)", qty: "—", use: "Grab-and-go protein snack", status: "have", note: "✓ In fridge — 9g protein!" },
-      { item: "String cheese or Babybel", qty: "1 pack", use: "Zero-prep protein", status: "buy" },
-      { item: "Apples or fruit", qty: "3–4", use: "Sweet craving", status: "buy" },
-      { item: "Almond butter", qty: "—", use: "With apple", status: "check" },
+      { item: "Edamame (shelled)",      qty: "—",    use: "Grab-and-go protein snack",    status: "have", note: "✓ In fridge — 9g protein!" },
+      { item: "String cheese or Babybel",qty: "1 pack",use: "Zero-prep protein",          status: "buy" },
+      { item: "Almond butter",          qty: "—",    use: "With plumcots or apple",       status: "check" },
     ]
   },
 ];
@@ -113,24 +174,20 @@ const statusStyle = {
 
 const recipes = [
   {
-    id: "steak",
-    emoji: "🥩",
+    id: "steak", type: "ig", emoji: "🥩",
     title: "Grilled Skirt Steak + Charred Corn Couscous Salad",
     source: "IG Save #5 — Alexandra Wagoner",
     link: "https://www.instagram.com/reel/DZdRQkTSLrv/",
     linkNote: "Full recipe at her IG bio — reel linked here",
     when: "Sunday · Cook Session 1",
-    serves: "2 meals (Sun + Mon)",
-    protein: "~35–40g per serving",
-    time: "~30 min",
-    color: "#2C4A2E",
-    bg: "#EEF3EC",
+    serves: "2 meals (Sun + Mon)", protein: "~35–40g per serving", time: "~30 min",
+    color: "#2C4A2E", bg: "#EEF3EC",
     ingredients: [
       ["Skirt steak", "~1–1.5 lbs"],
-      ["Corn on the cob", "2 ears (already in fridge!)"],
+      ["Corn on the cob", "2 ears (in fridge — use now!)"],
       ["Couscous", "1 cup dry"],
       ["Avocado", "1 ripe"],
-      ["Lime", "2 (or Santa Cruz lime juice)"],
+      ["Lime juice", "Santa Cruz or fresh limes"],
       ["Olive oil", "2–3 tbsp"],
       ["Salt, pepper, garlic powder", "To taste"],
       ["Fresh herbs (cilantro or parsley)", "Small handful"],
@@ -145,29 +202,26 @@ const recipes = [
       "Slice steak and serve over or alongside the salad.",
     ],
     notes: [
-      "Store steak separately from the salad so it doesn't overcook when you reheat Monday's leftovers.",
-      "Drizzle Monday leftovers with the Tahini Chili Oil Sauce to make it feel like a different meal.",
+      "Store steak separately from the salad so it doesn't overcook for Monday's leftovers.",
+      "Drizzle Monday's leftovers with Tahini Chili Oil Sauce to make it feel like a different meal.",
+      "The truffle aioli also works surprisingly well as a dipping sauce alongside the steak.",
     ]
   },
   {
-    id: "tahini",
-    emoji: "🫙",
+    id: "tahini", type: "ig", emoji: "🫙",
     title: "Tahini Chili Oil Sauce",
     source: "IG Save #47 — Klara Moderski",
     link: "https://www.instagram.com/reel/DX90W3LS6-t/",
     linkNote: "Full recipe in the reel caption",
     when: "Sunday · Make while the steak rests",
-    serves: "All week",
-    protein: "+3–5g per use",
-    time: "10 min",
-    color: "#6A1B9A",
-    bg: "#F5EEF8",
+    serves: "All week", protein: "+3–5g per use", time: "10 min",
+    color: "#6A1B9A", bg: "#F5EEF8",
     ingredients: [
-      ["Tahini", "4 tbsp"],
+      ["TJ's Organic Tahini", "4 tbsp (new jar from haul ✓)"],
       ["Crispy chili oil", "2 tbsp (or to taste)"],
       ["Maple syrup or 1 tsp sugar", "1 tbsp"],
       ["Rice wine vinegar", "2 tbsp"],
-      ["Light soy sauce", "3 tbsp"],
+      ["TJ's Soy Sauce (reduced sodium)", "3 tbsp (new bottle from haul ✓)"],
       ["Ice cold water if too thick", "1–2 tbsp"],
     ],
     steps: [
@@ -178,102 +232,269 @@ const recipes = [
     ],
     notes: [
       "Triple it. Klara's words, and she's right.",
-      "Use on: steak salad, chimichurri chicken, eggs, romaine as a dressing, pita chips as a dip.",
-      "Optional: add grated garlic, fresh ginger, or Sichuan pepper.",
+      "Use on: steak salad, chimichurri chicken, eggs, romaine as a dressing, crispbread or pita chips.",
+      "Optional add-ins: grated crisper garlic, fresh ginger, or Sichuan pepper.",
     ]
   },
   {
-    id: "chicken",
-    emoji: "🍗",
+    id: "baguette", type: "claude", emoji: "🥖",
+    title: "Truffle Aioli Baguette Sandwich",
+    source: "Built around your haul — baguette needs to be used by Tue",
+    link: null,
+    when: "Tuesday · Easy meal before Brit's",
+    serves: "1", protein: "~25–30g (with protein)", time: "5 min",
+    color: "#827717", bg: "#F9FBE7",
+    ingredients: [
+      ["TJ's Artisan Baguette", "Half loaf (use it — won't last past Tue)"],
+      ["Deli turkey or rotisserie chicken", "3–4 oz"],
+      ["Truffle Aioli", "Spread generously — this is the move"],
+      ["Romaine from garden", "A few leaves"],
+      ["Grillo's Pickle Spears", "Slice lengthwise alongside or inside"],
+      ["Salt + pepper", "To taste"],
+    ],
+    steps: [
+      "Slice baguette lengthwise. Spread truffle aioli on both cut sides.",
+      "Layer turkey or chicken, romaine leaves, and sliced pickles.",
+      "Season with salt and pepper. Press together, slice in half.",
+      "Eat half now, wrap the other half for later if you're not hungry.",
+    ],
+    notes: [
+      "The truffle aioli makes this feel way more intentional than a regular sandwich — it's the whole point.",
+      "The baguette is fresh and won't last — use the full thing Tuesday, or toast the other half for breakfast Wednesday.",
+      "Add habanero hot sauce if you want heat.",
+    ]
+  },
+  {
+    id: "chicken", type: "claude", emoji: "🍗",
     title: "Chimichurri Chicken Skewer Bowl",
-    source: "From your freezer + garden romaine",
+    source: "Built around your freezer + garden romaine",
     link: null,
     when: "Wednesday · Cook Session 2",
-    serves: "2 meals (Wed + Thu)",
-    protein: "~35g per serving",
-    time: "~25 min (mostly oven)",
-    color: "#1565C0",
-    bg: "#E8F0FB",
+    serves: "2 meals (Wed + Thu)", protein: "~35g per serving", time: "~25 min (mostly oven)",
+    color: "#1565C0", bg: "#E8F0FB",
     ingredients: [
       ["TJ's Chimichurri Chicken Skewers (frozen)", "1 bag"],
       ["Romaine lettuce", "From your garden — pick fresh!"],
       ["TJ's Garlic Dip or Tzatziki", "2–3 tbsp as dressing"],
       ["Cherry tomatoes", "Handful"],
       ["Peeled garlic (crisper drawer)", "1–2 cloves, minced into dressing"],
-      ["Lemon or lime", "A squeeze to finish"],
+      ["Lemon or lime juice", "A squeeze to finish"],
     ],
     steps: [
       "Preheat oven to 400°F. Place frozen skewers on a lined baking sheet.",
       "Cook 20–22 min, flipping halfway, until cooked through with slightly charred edges.",
       "While chicken cooks, tear romaine into a bowl and add tomatoes.",
-      "Mix TJ's Garlic Dip or Tzatziki with a little lemon juice and a minced clove of that crisper garlic. This is your dressing.",
+      "Mix TJ's Garlic Dip or Tzatziki with lemon juice and a minced clove of crisper garlic.",
       "Slide chicken off skewers, lay over the romaine, squeeze lemon over everything.",
     ],
     notes: [
-      "Thursday leftovers: reheat chicken in a pan with a splash of bone broth, assemble fresh lettuce around it.",
-      "The Everything Bagel dip also works as dressing here if you want to mix it up.",
+      "Thursday leftovers: reheat chicken in a pan with a splash of bone broth, assemble fresh lettuce.",
+      "The Everything Bagel dip also works as dressing if you want to mix it up.",
+      "Drizzle habanero sauce on top if you want heat.",
     ]
   },
   {
-    id: "alpastor",
-    emoji: "🌮",
+    id: "alpastor", type: "claude", emoji: "🌮",
     title: "Al Pastor Romaine Tacos",
-    source: "From your freezer — no recipe needed",
+    source: "Built around your freezer + garden romaine",
     link: null,
     when: "Friday · ~15 min",
-    serves: "1–2",
-    protein: "~30g",
-    time: "15 min",
-    color: "#BF360C",
-    bg: "#FBE9E7",
+    serves: "1–2", protein: "~30g", time: "15 min",
+    color: "#BF360C", bg: "#FBE9E7",
     ingredients: [
       ["Al pastor meat (frozen)", "1 portion"],
-      ["Romaine leaves (garden)", "6–8 large leaves as shells"],
+      ["Romaine leaves (garden)", "6–8 large leaves as taco shells"],
       ["TJ's Yogurt Dip or Tzatziki", "Drizzle — trust it with al pastor"],
       ["Herdez Salsa Verde", "For heat"],
+      ["Pico de Gallo (La Mexicana)", "Topping — use it up, it's been open"],
       ["Lime juice", "Santa Cruz or fresh"],
-      ["Pico de Gallo (Grillo's)", "Topping"],
     ],
     steps: [
-      "Thaw al pastor in the fridge overnight Thursday, or defrost in a pan over low heat with a splash of water.",
+      "Thaw al pastor in the fridge overnight Thursday, or defrost in a pan with a splash of water.",
       "Cook in a dry pan over medium-high heat until edges caramelize, ~5–8 min.",
       "Pick 6–8 large romaine leaves — these are your taco shells.",
-      "Fill with al pastor, drizzle yogurt dip or tzatziki, top with salsa verde and pico de gallo.",
+      "Fill with al pastor, drizzle yogurt dip, top with salsa verde and pico de gallo.",
       "Squeeze lime over everything. Done.",
     ],
     notes: [
-      "Romaine leaves as taco shells = built-in crunch, uses your garden harvest, zero extra carbs.",
-      "The yogurt dip sounds wrong with al pastor but the creamy tang balances the sweet heat perfectly.",
+      "Romaine leaves as taco shells = built-in crunch, uses your garden harvest.",
+      "The pico de Gallo has been open — Friday is the day to use it up.",
+      "The sweet chili sauce from your haul also works as a drizzle here.",
     ]
   },
 ];
 
-const snacks = [
-  { emoji: "🥒", name: "Grillo's pickles + edamame", why: "Salty crunch combo, 9g protein from edamame alone — your chip replacement this week" },
-  { emoji: "🫙", name: "Labneh dip + pita chips", why: "Thick and creamy, feels indulgent, way more protein than regular chips and dip" },
-  { emoji: "☕", name: "Warm mug of bone broth", why: "For low-appetite days — counts as something, keeps muscle preservation on track" },
-  { emoji: "🧀", name: "String cheese or Babybel", why: "Zero prep, grab-and-go protein when you can't even think about eating" },
-  { emoji: "🍎", name: "Apple + almond butter", why: "Sweet craving without a crash — fat + fiber keeps it from spiking" },
-  { emoji: "🥚", name: "Hard boiled eggs (batch 4–5 Sunday)", why: "6g protein each, ready all week, eat with a splash of hot sauce or Everything Bagel dip" },
-];
+// ─── PANTRY PAGE ───────────────────────────────────────────────────────────
+function PantryPage({ onBack }) {
+  const categories = [...new Set(pantryDB.map(i => i.category))];
+  const categoryColors = {
+    Condiment: "#6A1B9A", Pantry: "#2C4A2E", Spice: "#C4714A",
+    Dairy: "#1565C0", Produce: "#827717", Snack: "#283593", Bread: "#BF360C",
+  };
+  return (
+    <div style={{ fontFamily: "'Inter', sans-serif", background: "#FAF7F2", minHeight: "100vh" }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap'); *{box-sizing:border-box;margin:0;padding:0;}`}</style>
+      <div style={{ background: "linear-gradient(135deg,#2C4A2E,#7A8C5E)", padding: "2rem 1.5rem 1.5rem", color: "#FAF7F2" }}>
+        <button onClick={onBack} style={{ background: "rgba(255,255,255,0.15)", border: "none", color: "#fff", padding: "0.4rem 1rem", borderRadius: 20, cursor: "pointer", fontSize: "0.82rem", marginBottom: "1rem" }}>← Back</button>
+        <p style={{ fontSize: "0.72rem", letterSpacing: "0.15em", textTransform: "uppercase", opacity: 0.7, marginBottom: "0.4rem" }}>Pantry Database</p>
+        <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "2rem", fontWeight: 700 }}>What You Have</h1>
+        <p style={{ opacity: 0.8, fontSize: "0.85rem", marginTop: "0.5rem" }}>🔒 Locked = confirmed from photo · ○ Assumed = verify not expired</p>
+      </div>
+      <div style={{ maxWidth: 720, margin: "0 auto", padding: "1.5rem 1.25rem 4rem" }}>
+        {categories.map(cat => {
+          const items = pantryDB.filter(i => i.category === cat);
+          const col = categoryColors[cat] || "#444";
+          return (
+            <div key={cat} style={{ marginBottom: "1.25rem" }}>
+              <div style={{ background: col, color: "#fff", borderRadius: "10px 10px 0 0", padding: "0.6rem 1rem", fontSize: "0.82rem", fontWeight: 700 }}>{cat}</div>
+              <div style={{ background: "#fff", border: "1.5px solid #EDE6DC", borderTop: "none", borderRadius: "0 0 10px 10px", overflow: "hidden" }}>
+                {items.map((item, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.7rem 1rem", borderBottom: i < items.length - 1 ? "1px solid #F0EBE1" : "none" }}>
+                    <span style={{ fontSize: "1rem", flexShrink: 0 }}>{item.locked ? "🔒" : "○"}</span>
+                    <div style={{ flex: 1 }}>
+                      <p style={{ fontSize: "0.86rem", fontWeight: 600, color: item.fresh ? "#BF360C" : "#2A2420" }}>{item.name}{item.fresh ? " ⚡" : ""}</p>
+                      <p style={{ fontSize: "0.73rem", color: "#9A8C82", marginTop: "0.1rem" }}>{item.note}</p>
+                    </div>
+                    {item.approxExpiry && (
+                      <span style={{ fontSize: "0.68rem", fontWeight: 600, padding: "0.2rem 0.55rem", borderRadius: 8, background: item.fresh ? "#FBE9E7" : "#F5F5F5", color: item.fresh ? "#BF360C" : "#666", flexShrink: 0, whiteSpace: "nowrap" }}>
+                        exp ~{item.approxExpiry}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+        <p style={{ fontSize: "0.74rem", color: "#B5A99E", textAlign: "center", marginTop: "1rem" }}>⚡ = fresh item, use soon</p>
+      </div>
+    </div>
+  );
+}
 
-const breakfasts = [
-  { name: "Hash brown + fried egg + hot sauce", note: "Default upgrade — adds 6–8g protein, 2 extra minutes" },
-  { name: "Hash brown + Everything Bagel yogurt dip", note: "Schmear it on top like a savory cream cheese situation" },
-  { name: "Hash brown + tzatziki + fresh romaine", note: "Sounds weird, tastes like a little breakfast wrap" },
-  { name: "Soft scrambled eggs + whatever's around", note: "Butter, salt, hot sauce — 5 min, ~14g protein for 2 eggs" },
-  { name: "Hash brown + labneh + Grillo's pickle de gallo", note: "The pickled element wakes everything up" },
-];
+// ─── TODAY PAGE ────────────────────────────────────────────────────────────
+function TodayPage({ onBack }) {
+  const today = new Date();
+  const weekStart = new Date("2026-06-15");
+  const weekEnd = new Date("2026-06-21");
+  const inRange = today >= weekStart && today <= weekEnd;
+  const todayStr = today.toISOString().split("T")[0];
+  const todayPlan = inRange ? dayPlan.find(d => d.date === todayStr) : dayPlan[0];
+  const displayDate = todayPlan
+    ? new Date(todayPlan.date + "T12:00:00").toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })
+    : "";
+  const ts = todayPlan ? tagStyles[todayPlan.tag] : tagStyles.free;
+  const todayRecipe = todayPlan ? recipes.find(r => r.id === {
+    "🥩": "steak", "🥗": "steak", "🥖": "baguette",
+    "🍗": "chicken", "🌮": "alpastor", "✨": null
+  }[todayPlan.emoji]) : null;
 
-export default function WeeklyMealPlan() {
+  return (
+    <div style={{ fontFamily: "'Inter', sans-serif", background: "#FAF7F2", minHeight: "100vh" }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap'); *{box-sizing:border-box;margin:0;padding:0;} ol{padding-left:1.25rem;}`}</style>
+
+      {/* Header */}
+      <div style={{ background: "linear-gradient(135deg,#2C4A2E,#7A8C5E)", padding: "2rem 1.5rem 1.5rem", color: "#FAF7F2" }}>
+        <button onClick={onBack} style={{ background: "rgba(255,255,255,0.15)", border: "none", color: "#fff", padding: "0.4rem 1rem", borderRadius: 20, cursor: "pointer", fontSize: "0.82rem", marginBottom: "1rem" }}>← Meal Plan</button>
+        <p style={{ fontSize: "0.72rem", letterSpacing: "0.15em", textTransform: "uppercase", opacity: 0.7, marginBottom: "0.4rem" }}>Today</p>
+        <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "2rem", fontWeight: 700, lineHeight: 1.2 }}>{displayDate}</h1>
+        {!inRange && <p style={{ opacity: 0.7, fontSize: "0.82rem", marginTop: "0.5rem" }}>Showing Sunday's plan — check back during the week</p>}
+      </div>
+
+      <div style={{ maxWidth: 720, margin: "0 auto", padding: "1.5rem 1.25rem 4rem" }}>
+
+        {/* Today's Meal */}
+        {todayPlan && (
+          <div style={{ background: "#fff", borderRadius: 16, border: `2px solid ${ts.bg}`, padding: "1.25rem", marginBottom: "1.5rem" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.75rem" }}>
+              <p style={{ fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#7A6E65" }}>Today's Meal</p>
+              <span style={{ fontSize: "0.7rem", fontWeight: 700, padding: "0.2rem 0.6rem", borderRadius: 10, background: ts.bg, color: ts.color }}>{ts.label}</span>
+            </div>
+            <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>{todayPlan.emoji}</div>
+            <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.4rem", fontWeight: 700, marginBottom: "0.4rem" }}>{todayPlan.meal}</h2>
+            <p style={{ fontSize: "0.83rem", color: "#7A6E65" }}>{todayPlan.note}</p>
+          </div>
+        )}
+
+        {/* Today's Recipe (collapsed inline) */}
+        {todayRecipe && (
+          <div style={{ background: "#fff", borderRadius: 14, border: `1.5px solid ${todayRecipe.bg}`, marginBottom: "1.5rem", overflow: "hidden" }}>
+            <div style={{ background: todayRecipe.bg, padding: "0.7rem 1.1rem" }}>
+              <p style={{ fontSize: "0.75rem", fontWeight: 700, color: todayRecipe.color, textTransform: "uppercase", letterSpacing: "0.08em" }}>Recipe</p>
+            </div>
+            <div style={{ padding: "1rem 1.1rem" }}>
+              <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.05rem", fontWeight: 700, marginBottom: "0.85rem" }}>{todayRecipe.title}</h3>
+              <p style={{ fontSize: "0.78rem", fontWeight: 700, color: todayRecipe.color, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "0.5rem" }}>Ingredients</p>
+              <div style={{ background: "#FAF7F2", borderRadius: 8, overflow: "hidden", marginBottom: "1rem" }}>
+                {todayRecipe.ingredients.map(([ing, amt], i) => (
+                  <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "0.45rem 0.8rem", background: i % 2 === 0 ? "#FAF7F2" : "#fff", fontSize: "0.82rem" }}>
+                    <span>{ing}</span>
+                    <span style={{ color: todayRecipe.color, fontWeight: 600, marginLeft: "0.75rem", textAlign: "right" }}>{amt}</span>
+                  </div>
+                ))}
+              </div>
+              <p style={{ fontSize: "0.78rem", fontWeight: 700, color: todayRecipe.color, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "0.5rem" }}>Method</p>
+              <ol>
+                {todayRecipe.steps.map((s, i) => (
+                  <li key={i} style={{ fontSize: "0.84rem", color: "#3A3228", lineHeight: 1.6, marginBottom: "0.4rem", paddingLeft: "0.2rem" }}>{s}</li>
+                ))}
+              </ol>
+              {todayRecipe.link && (
+                <div style={{ marginTop: "0.85rem", padding: "0.6rem 0.8rem", background: todayRecipe.bg, borderRadius: 8 }}>
+                  <p style={{ fontSize: "0.75rem", color: todayRecipe.color, fontWeight: 600, marginBottom: "0.2rem" }}>📎 {todayRecipe.linkNote}</p>
+                  <a href={todayRecipe.link} target="_blank" rel="noreferrer" style={{ fontSize: "0.75rem", color: todayRecipe.color, wordBreak: "break-all" }}>{todayRecipe.link}</a>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Breakfast Options */}
+        <div style={{ marginBottom: "1.5rem" }}>
+          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.3rem", fontWeight: 700, marginBottom: "0.25rem" }}>Breakfast Options</h2>
+          <p style={{ fontSize: "0.82rem", color: "#7A6E65", marginBottom: "0.85rem" }}>Pick whatever sounds good. Just don't eat it alone.</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+            {breakfasts.map((b, i) => (
+              <div key={i} style={{ background: "#fff", borderRadius: 11, padding: "0.8rem 1rem", border: "1.5px solid #EDE6DC", display: "flex", gap: "0.7rem" }}>
+                <span style={{ background: "#EEF3EC", color: "#2C4A2E", borderRadius: "50%", width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.72rem", fontWeight: 700, flexShrink: 0, marginTop: 1 }}>{i + 1}</span>
+                <div>
+                  <p style={{ fontSize: "0.85rem", fontWeight: 600, marginBottom: "0.15rem" }}>{b.name}</p>
+                  <p style={{ fontSize: "0.76rem", color: "#9A8C82" }}>{b.note}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Snack Options */}
+        <div>
+          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.3rem", fontWeight: 700, marginBottom: "0.25rem" }}>Snack Options</h2>
+          <p style={{ fontSize: "0.82rem", color: "#7A6E65", marginBottom: "0.85rem" }}>For when appetite is low or chips are calling.</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+            {snacks.map((s, i) => (
+              <div key={i} style={{ background: "#fff", borderRadius: 11, padding: "0.8rem 1rem", border: "1.5px solid #EDE6DC", display: "flex", gap: "0.75rem" }}>
+                <span style={{ fontSize: "1.4rem", flexShrink: 0 }}>{s.emoji}</span>
+                <div>
+                  <p style={{ fontSize: "0.85rem", fontWeight: 600, marginBottom: "0.15rem" }}>{s.name}</p>
+                  <p style={{ fontSize: "0.76rem", color: "#9A8C82", lineHeight: 1.45 }}>{s.why}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
+// ─── MAIN MEAL PLAN PAGE ───────────────────────────────────────────────────
+function MealPlanPage({ onNavigate }) {
   const [activeSection, setActiveSection] = useState("week");
   const [checkedItems, setCheckedItems] = useState({});
   const [openRecipe, setOpenRecipe] = useState(null);
 
-  const toggleCheck = (key) => {
-    setCheckedItems(prev => ({ ...prev, [key]: !prev[key] }));
-  };
-
+  const toggleCheck = (key) => setCheckedItems(prev => ({ ...prev, [key]: !prev[key] }));
   const scrollTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
     setActiveSection(id);
@@ -284,12 +505,11 @@ export default function WeeklyMealPlan() {
     { id: "shopping", label: "Shop" },
     { id: "recipes", label: "Recipes" },
     { id: "snacks", label: "Snacks" },
+    { id: "archive", label: "Archive" },
   ];
 
   return (
     <div style={{ fontFamily: "'Inter', sans-serif", background: "#FAF7F2", minHeight: "100vh", color: "#2A2420" }}>
-
-      {/* Google Fonts */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -299,36 +519,32 @@ export default function WeeklyMealPlan() {
         .nav-btn { transition: all 0.15s; }
         .nav-btn:hover { background: #2C4A2E !important; color: #fff !important; }
         .check-row:hover { background: rgba(44,74,46,0.04); }
+        .today-btn:hover { background: #fff !important; color: #2C4A2E !important; }
         a { color: #2C4A2E; }
         @media (max-width: 600px) {
           .hero-title { font-size: 2rem !important; }
           .day-grid { grid-template-columns: 1fr 1fr !important; }
+          .top-btns { flex-direction: column !important; gap: 0.5rem !important; }
         }
       `}</style>
 
       {/* Hero */}
-      <div style={{ background: "linear-gradient(135deg, #2C4A2E 0%, #3D6640 60%, #7A8C5E 100%)", padding: "3rem 1.5rem 2rem", color: "#FAF7F2" }}>
+      <div style={{ background: "linear-gradient(135deg, #2C4A2E 0%, #3D6640 60%, #7A8C5E 100%)", padding: "2.5rem 1.5rem 1.75rem", color: "#FAF7F2" }}>
         <div style={{ maxWidth: 720, margin: "0 auto" }}>
-          <p style={{ fontSize: "0.75rem", letterSpacing: "0.15em", textTransform: "uppercase", opacity: 0.7, marginBottom: "0.75rem", fontFamily: "Inter" }}>
-            Weekly Meal Plan
-          </p>
-          <h1 className="hero-title" style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.6rem", fontWeight: 700, lineHeight: 1.15, marginBottom: "0.5rem" }}>
-            {WEEK}
-          </h1>
-          <p style={{ opacity: 0.8, fontSize: "0.95rem", marginTop: "0.75rem" }}>
-            2 cook sessions · Protein-forward · GLP-1 friendly · Leftovers by design
-          </p>
-          <div style={{ display: "flex", gap: "0.5rem", marginTop: "1.25rem", flexWrap: "wrap" }}>
-            {[["🥩","Skirt Steak (Sun)"],["🍗","Chimichurri Chicken (Wed)"],["🌮","Al Pastor (Fri)"]].map(([e,l]) => (
-              <span key={l} style={{ background: "rgba(255,255,255,0.15)", borderRadius: 20, padding: "0.3rem 0.8rem", fontSize: "0.8rem", backdropFilter: "blur(4px)" }}>{e} {l}</span>
-            ))}
+          <div className="top-btns" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem", gap: "0.75rem" }}>
+            <p style={{ fontSize: "0.75rem", letterSpacing: "0.15em", textTransform: "uppercase", opacity: 0.7, fontFamily: "Inter" }}>This Week's Meal Plan</p>
+            <div style={{ display: "flex", gap: "0.5rem" }}>
+              <button className="today-btn" onClick={() => onNavigate("today")} style={{ background: "rgba(255,255,255,0.2)", border: "1.5px solid rgba(255,255,255,0.5)", color: "#fff", padding: "0.35rem 0.9rem", borderRadius: 20, cursor: "pointer", fontSize: "0.78rem", fontWeight: 600, transition: "all 0.15s" }}>📅 Today</button>
+              <button className="today-btn" onClick={() => onNavigate("pantry")} style={{ background: "rgba(255,255,255,0.2)", border: "1.5px solid rgba(255,255,255,0.5)", color: "#fff", padding: "0.35rem 0.9rem", borderRadius: 20, cursor: "pointer", fontSize: "0.78rem", fontWeight: 600, transition: "all 0.15s" }}>🧺 Pantry</button>
+            </div>
           </div>
+          <h1 className="hero-title" style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.6rem", fontWeight: 700, lineHeight: 1.15 }}>{WEEK}</h1>
         </div>
       </div>
 
       {/* Sticky Nav */}
       <div style={{ position: "sticky", top: 0, zIndex: 100, background: "#FAF7F2", borderBottom: "1.5px solid #E8E0D5", padding: "0.6rem 1.5rem" }}>
-        <div style={{ maxWidth: 720, margin: "0 auto", display: "flex", gap: "0.4rem" }}>
+        <div style={{ maxWidth: 720, margin: "0 auto", display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
           {navItems.map(n => (
             <button key={n.id} className="nav-btn" onClick={() => scrollTo(n.id)}
               style={{ fontFamily: "Inter", fontSize: "0.82rem", fontWeight: 600, padding: "0.4rem 1rem", borderRadius: 20, border: "1.5px solid #2C4A2E", background: activeSection === n.id ? "#2C4A2E" : "transparent", color: activeSection === n.id ? "#fff" : "#2C4A2E", cursor: "pointer", letterSpacing: "0.02em" }}>
@@ -382,12 +598,10 @@ export default function WeeklyMealPlan() {
         {/* SHOPPING LIST */}
         <section id="shopping" style={{ paddingTop: "2.5rem" }}>
           <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem" }}>Shopping List</h2>
-          <p style={{ color: "#7A6E65", fontSize: "0.88rem", marginBottom: "1.5rem" }}>Tap to check items off as you shop. ✓ Have = already in your fridge.</p>
+          <p style={{ color: "#7A6E65", fontSize: "0.88rem", marginBottom: "1.5rem" }}>Tap to check off as you shop. ✓ Have = confirmed in fridge or haul.</p>
           {shoppingCategories.map((cat, ci) => (
             <div key={ci} style={{ marginBottom: "1.25rem" }}>
-              <div style={{ background: cat.color, color: "#fff", borderRadius: "10px 10px 0 0", padding: "0.6rem 1rem", fontSize: "0.82rem", fontWeight: 700, letterSpacing: "0.03em" }}>
-                {cat.name}
-              </div>
+              <div style={{ background: cat.color, color: "#fff", borderRadius: "10px 10px 0 0", padding: "0.6rem 1rem", fontSize: "0.82rem", fontWeight: 700 }}>{cat.name}</div>
               <div style={{ background: "#fff", border: "1.5px solid #EDE6DC", borderTop: "none", borderRadius: "0 0 10px 10px", overflow: "hidden" }}>
                 {cat.items.map((item, ii) => {
                   const key = `${ci}-${ii}`;
@@ -421,12 +635,15 @@ export default function WeeklyMealPlan() {
               const isOpen = openRecipe === r.id;
               return (
                 <div key={r.id} className="recipe-card" style={{ background: "#fff", borderRadius: 16, border: `2px solid ${isOpen ? r.color : "#EDE6DC"}`, overflow: "hidden", transition: "border-color 0.2s, box-shadow 0.2s" }}>
-                  {/* Recipe Header */}
-                  <div onClick={() => setOpenRecipe(isOpen ? null : r.id)}
-                    style={{ padding: "1.1rem 1.25rem", cursor: "pointer", display: "flex", gap: "1rem", alignItems: "flex-start" }}>
+                  <div onClick={() => setOpenRecipe(isOpen ? null : r.id)} style={{ padding: "1.1rem 1.25rem", cursor: "pointer", display: "flex", gap: "1rem", alignItems: "flex-start" }}>
                     <span style={{ fontSize: "2rem", flexShrink: 0 }}>{r.emoji}</span>
                     <div style={{ flex: 1 }}>
-                      <p style={{ fontSize: "0.7rem", color: r.color, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "0.2rem" }}>{r.when}</p>
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.2rem", flexWrap: "wrap" }}>
+                        <p style={{ fontSize: "0.7rem", color: r.color, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em" }}>{r.when}</p>
+                        <span style={{ fontSize: "0.62rem", fontWeight: 700, padding: "0.15rem 0.5rem", borderRadius: 8, background: r.type === "ig" ? "#FFF8E1" : "#E8F0FB", color: r.type === "ig" ? "#B45309" : "#1565C0", border: r.type === "ig" ? "1px solid #FDE68A" : "1px solid #BFDBFE" }}>
+                          {r.type === "ig" ? "📱 From IG saves" : "✦ Claude-built"}
+                        </span>
+                      </div>
                       <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.1rem", fontWeight: 700, lineHeight: 1.25, marginBottom: "0.4rem" }}>{r.title}</h3>
                       <p style={{ fontSize: "0.74rem", color: "#9A8C82" }}>{r.source}</p>
                       <div style={{ display: "flex", gap: "0.5rem", marginTop: "0.6rem", flexWrap: "wrap" }}>
@@ -437,8 +654,6 @@ export default function WeeklyMealPlan() {
                     </div>
                     <span style={{ color: "#C8BEB4", fontSize: "1.2rem", flexShrink: 0, marginTop: 4 }}>{isOpen ? "▲" : "▼"}</span>
                   </div>
-
-                  {/* Expanded Content */}
                   {isOpen && (
                     <div style={{ borderTop: `1.5px solid ${r.bg}`, padding: "1.25rem" }}>
                       {r.link && (
@@ -447,7 +662,6 @@ export default function WeeklyMealPlan() {
                           <a href={r.link} target="_blank" rel="noreferrer" style={{ fontSize: "0.78rem", wordBreak: "break-all" }}>{r.link}</a>
                         </div>
                       )}
-
                       <h4 style={{ fontSize: "0.8rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: r.color, marginBottom: "0.75rem" }}>Ingredients</h4>
                       <div style={{ background: "#FAF7F2", borderRadius: 10, overflow: "hidden", marginBottom: "1.25rem" }}>
                         {r.ingredients.map(([ing, amt], i) => (
@@ -457,14 +671,12 @@ export default function WeeklyMealPlan() {
                           </div>
                         ))}
                       </div>
-
                       <h4 style={{ fontSize: "0.8rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: r.color, marginBottom: "0.75rem" }}>Method</h4>
                       <ol style={{ paddingLeft: "1.25rem", marginBottom: "1.25rem" }}>
                         {r.steps.map((s, i) => (
                           <li key={i} style={{ fontSize: "0.86rem", color: "#3A3228", lineHeight: 1.6, marginBottom: "0.5rem", paddingLeft: "0.25rem" }}>{s}</li>
                         ))}
                       </ol>
-
                       {r.notes.length > 0 && (
                         <>
                           <h4 style={{ fontSize: "0.8rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: r.color, marginBottom: "0.6rem" }}>Notes</h4>
@@ -487,7 +699,7 @@ export default function WeeklyMealPlan() {
         {/* SNACKS */}
         <section id="snacks" style={{ paddingTop: "2.5rem" }}>
           <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem" }}>Snack Rotation</h2>
-          <p style={{ color: "#7A6E65", fontSize: "0.88rem", marginBottom: "1.25rem" }}>For days when appetite is low or chips are calling. All of these are already in your fridge or on your list.</p>
+          <p style={{ color: "#7A6E65", fontSize: "0.88rem", marginBottom: "1.25rem" }}>For days when appetite is low or chips are calling.</p>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
             {snacks.map((s, i) => (
               <div key={i} style={{ background: "#fff", borderRadius: 12, padding: "0.9rem 1.1rem", border: "1.5px solid #EDE6DC", display: "flex", gap: "0.9rem", alignItems: "flex-start" }}>
@@ -501,12 +713,30 @@ export default function WeeklyMealPlan() {
           </div>
         </section>
 
+        {/* ARCHIVE */}
+        <section id="archive" style={{ paddingTop: "2.5rem" }}>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem" }}>Past Weeks</h2>
+          <p style={{ color: "#7A6E65", fontSize: "0.88rem", marginBottom: "1.25rem" }}>Previous meal plans will live here as each week rolls over.</p>
+          <div style={{ background: "#fff", borderRadius: 14, border: "1.5px dashed #D4C5B0", padding: "2.5rem 1.5rem", textAlign: "center" }}>
+            <p style={{ fontSize: "2rem", marginBottom: "0.75rem" }}>📂</p>
+            <p style={{ fontSize: "0.9rem", fontWeight: 600, color: "#2A2420", marginBottom: "0.35rem" }}>Nothing here yet</p>
+            <p style={{ fontSize: "0.8rem", color: "#9A8C82" }}>This week's plan will move here when next week's is ready.</p>
+          </div>
+        </section>
+
         {/* Footer */}
         <div style={{ marginTop: "3rem", paddingTop: "1.5rem", borderTop: "1.5px solid #EDE6DC", textAlign: "center" }}>
           <p style={{ fontSize: "0.75rem", color: "#B5A99E" }}>Built with Claude · Week of {WEEK}</p>
         </div>
-
       </div>
     </div>
   );
+}
+
+// ─── APP ROUTER ────────────────────────────────────────────────────────────
+export default function App() {
+  const [page, setPage] = useState("main");
+  if (page === "today")  return <TodayPage   onBack={() => setPage("main")} />;
+  if (page === "pantry") return <PantryPage  onBack={() => setPage("main")} />;
+  return <MealPlanPage onNavigate={setPage} />;
 }
