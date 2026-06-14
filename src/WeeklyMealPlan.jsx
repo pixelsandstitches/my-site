@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // ─── PANTRY DATABASE ───────────────────────────────────────────────────────
 // Locked = confirmed from photo. Assumed = standard pantry staple to verify.
@@ -81,16 +81,16 @@ const snacks = [
 ];
 
 const tagStyles = {
-  cook:     { bg: "#2C4A2E", color: "#fff", label: "Cook" },
-  leftover: { bg: "#C4714A", color: "#fff", label: "Leftover" },
-  easy:     { bg: "#7A8C5E", color: "#fff", label: "Easy" },
-  free:     { bg: "#D4C5B0", color: "#3A3228", label: "Free" },
+  cook:     { bg: "#3A5C3E", color: "#CEC8BE", label: "Cook" },
+  leftover: { bg: "#8C8C2A", color: "#F5F3EF", label: "Leftover" },
+  easy:     { bg: "#B8A0C8", color: "#3d2a4a", label: "Easy" },
+  free:     { bg: "#B8D9C2", color: "#3A5C3E", label: "Free" },
 };
 
 const shoppingCategories = [
   {
     name: "🥩 Protein — Buy",
-    color: "#2C4A2E", bg: "#EEF3EC",
+    color: "#3A5C3E", bg: "#B8D9C2",
     items: [
       { item: "Skirt steak",                       qty: "~1–1.5 lbs", use: "Sunday cook session",         status: "buy" },
       { item: "Eggs",                               qty: "1 dozen",    use: "Breakfast + hard boiled snacks", status: "buy" },
@@ -99,7 +99,7 @@ const shoppingCategories = [
   },
   {
     name: "🧊 Freezer — Confirm",
-    color: "#1565C0", bg: "#E8F0FB",
+    color: "#3A5C3E", bg: "#B8D9C2",
     items: [
       { item: "TJ's Chimichurri Chicken Skewers", qty: "1 bag",     use: "Wednesday cook session", status: "confirm" },
       { item: "Al Pastor meat",                   qty: "1 portion", use: "Friday tacos",           status: "confirm" },
@@ -107,7 +107,7 @@ const shoppingCategories = [
   },
   {
     name: "🌽 Produce — Buy",
-    color: "#827717", bg: "#F9FBE7",
+    color: "#7a6b3a", bg: "#ede8df",
     items: [
       { item: "Corn on the cob",    qty: "—",      use: "Skirt steak salad — USE SUNDAY",          status: "have", note: "✓ In fridge — use this weekend!" },
       { item: "Plumcots",           qty: "—",      use: "Snack this week — eat by Wed",            status: "have", note: "✓ From haul — fresh, perishable" },
@@ -117,7 +117,7 @@ const shoppingCategories = [
   },
   {
     name: "🧺 Pantry — Locked In From Haul",
-    color: "#C4714A", bg: "#FDF3EE",
+    color: "#8C8C2A", bg: "#ede8df",
     items: [
       { item: "TJ's Organic Tahini",          qty: "New jar",    use: "Tahini chili oil sauce",    status: "have", note: "✓ From haul" },
       { item: "TJ's Soy Sauce (reduced)",     qty: "New bottle", use: "Tahini sauce + marinades",  status: "have", note: "✓ From haul" },
@@ -136,7 +136,7 @@ const shoppingCategories = [
   },
   {
     name: "🧊 Fridge Condiments — Confirmed",
-    color: "#6A1B9A", bg: "#F5EEF8",
+    color: "#3A5C3E", bg: "#B8D9C2",
     items: [
       { item: "TJ's Tzatziki",                 qty: "—", use: "Chicken bowl, baguette sandwich",  status: "have", note: "✓ In fridge" },
       { item: "TJ's Garlic Spread-Dip",        qty: "—", use: "Chicken bowl, crispbread",         status: "have", note: "✓ In fridge" },
@@ -149,14 +149,14 @@ const shoppingCategories = [
   },
   {
     name: "🥣 Breakfast — Buy",
-    color: "#BF360C", bg: "#FBE9E7",
+    color: "#8C8C2A", bg: "#ede8df",
     items: [
       { item: "TJ's Hash Browns (frozen)", qty: "1 box", use: "Default breakfast", status: "buy" },
     ]
   },
   {
     name: "🧀 Snacks — Buy",
-    color: "#283593", bg: "#E8EAF6",
+    color: "#3A5C3E", bg: "#B8D9C2",
     items: [
       { item: "Edamame (shelled)",      qty: "—",    use: "Grab-and-go protein snack",    status: "have", note: "✓ In fridge — 9g protein!" },
       { item: "String cheese or Babybel",qty: "1 pack",use: "Zero-prep protein",          status: "buy" },
@@ -166,10 +166,10 @@ const shoppingCategories = [
 ];
 
 const statusStyle = {
-  buy:     { color: "#2C4A2E", bg: "#EEF3EC", label: "Buy" },
-  have:    { color: "#1565C0", bg: "#E8F0FB", label: "✓ Have" },
-  confirm: { color: "#C4714A", bg: "#FDF3EE", label: "Confirm" },
-  check:   { color: "#6A1B9A", bg: "#F5EEF8", label: "Check expiry" },
+  buy:     { color: "#FAFAF8", bg: "#3A5C3E", label: "Buy" },
+  have:    { color: "#3A5C3E", bg: "#B8D9C2", label: "✓ Have" },
+  confirm: { color: "#3d2a4a", bg: "#B8A0C8", label: "Confirm" },
+  check:   { color: "#FAFAF8", bg: "#8C8C2A", label: "Check expiry" },
 };
 
 const recipes = [
@@ -181,7 +181,7 @@ const recipes = [
     linkNote: "Full recipe at her IG bio — reel linked here",
     when: "Sunday · Cook Session 1",
     serves: "2 meals (Sun + Mon)", protein: "~35–40g per serving", time: "~30 min",
-    color: "#2C4A2E", bg: "#EEF3EC",
+    color: "#3A5C3E", bg: "#B8D9C2",
     ingredients: [
       ["Skirt steak", "~1–1.5 lbs"],
       ["Corn on the cob", "2 ears (in fridge — use now!)"],
@@ -215,7 +215,7 @@ const recipes = [
     linkNote: "Full recipe in the reel caption",
     when: "Sunday · Make while the steak rests",
     serves: "All week", protein: "+3–5g per use", time: "10 min",
-    color: "#6A1B9A", bg: "#F5EEF8",
+    color: "#3d2a4a", bg: "#ede8f5",
     ingredients: [
       ["TJ's Organic Tahini", "4 tbsp (new jar from haul ✓)"],
       ["Crispy chili oil", "2 tbsp (or to taste)"],
@@ -243,7 +243,7 @@ const recipes = [
     link: null,
     when: "Tuesday · Easy meal before Brit's",
     serves: "1", protein: "~25–30g (with protein)", time: "5 min",
-    color: "#827717", bg: "#F9FBE7",
+    color: "#8C8C2A", bg: "#f5f3e0",
     ingredients: [
       ["TJ's Artisan Baguette", "Half loaf (use it — won't last past Tue)"],
       ["Deli turkey or rotisserie chicken", "3–4 oz"],
@@ -271,7 +271,7 @@ const recipes = [
     link: null,
     when: "Wednesday · Cook Session 2",
     serves: "2 meals (Wed + Thu)", protein: "~35g per serving", time: "~25 min (mostly oven)",
-    color: "#1565C0", bg: "#E8F0FB",
+    color: "#B8A0C8", bg: "#ede8f5",
     ingredients: [
       ["TJ's Chimichurri Chicken Skewers (frozen)", "1 bag"],
       ["Romaine lettuce", "From your garden — pick fresh!"],
@@ -300,7 +300,7 @@ const recipes = [
     link: null,
     when: "Friday · ~15 min",
     serves: "1–2", protein: "~30g", time: "15 min",
-    color: "#BF360C", bg: "#FBE9E7",
+    color: "#6B5550", bg: "#ede8e2",
     ingredients: [
       ["Al pastor meat (frozen)", "1 portion"],
       ["Romaine leaves (garden)", "6–8 large leaves as taco shells"],
@@ -328,16 +328,16 @@ const recipes = [
 function PantryPage({ onBack }) {
   const categories = [...new Set(pantryDB.map(i => i.category))];
   const categoryColors = {
-    Condiment: "#6A1B9A", Pantry: "#2C4A2E", Spice: "#C4714A",
-    Dairy: "#1565C0", Produce: "#827717", Snack: "#283593", Bread: "#BF360C",
+    Condiment: "#3A5C3E", Pantry: "#3A5C3E", Spice: "#8C8C2A",
+    Dairy: "#3A5C3E", Produce: "#7a6b3a", Snack: "#3A5C3E", Bread: "#8C8C2A",
   };
   return (
-    <div style={{ fontFamily: "'Inter', sans-serif", background: "#FAF7F2", minHeight: "100vh" }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap'); *{box-sizing:border-box;margin:0;padding:0;}`}</style>
-      <div style={{ background: "linear-gradient(135deg,#2C4A2E,#7A8C5E)", padding: "2rem 1.5rem 1.5rem", color: "#FAF7F2" }}>
+    <div style={{ fontFamily: "'Zilla Slab', serif", background: "#F5F3EF", minHeight: "100vh" }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,400&family=Zilla+Slab:wght@300;400;500;600&display=swap'); *{box-sizing:border-box;margin:0;padding:0;}`}</style>
+      <div style={{ background: "#3A5C3E", padding: "2rem 1.5rem 1.5rem", color: "#F5F3EF" }}>
         <button onClick={onBack} style={{ background: "rgba(255,255,255,0.15)", border: "none", color: "#fff", padding: "0.4rem 1rem", borderRadius: 20, cursor: "pointer", fontSize: "0.82rem", marginBottom: "1rem" }}>← Back</button>
         <p style={{ fontSize: "0.72rem", letterSpacing: "0.15em", textTransform: "uppercase", opacity: 0.7, marginBottom: "0.4rem" }}>Pantry Database</p>
-        <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "2rem", fontWeight: 700 }}>What You Have</h1>
+        <h1 style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: "2rem", fontWeight: 700 }}>What You Have</h1>
         <p style={{ opacity: 0.8, fontSize: "0.85rem", marginTop: "0.5rem" }}>🔒 Locked = confirmed from photo · ○ Assumed = verify not expired</p>
       </div>
       <div style={{ maxWidth: 720, margin: "0 auto", padding: "1.5rem 1.25rem 4rem" }}>
@@ -347,16 +347,16 @@ function PantryPage({ onBack }) {
           return (
             <div key={cat} style={{ marginBottom: "1.25rem" }}>
               <div style={{ background: col, color: "#fff", borderRadius: "10px 10px 0 0", padding: "0.6rem 1rem", fontSize: "0.82rem", fontWeight: 700 }}>{cat}</div>
-              <div style={{ background: "#fff", border: "1.5px solid #EDE6DC", borderTop: "none", borderRadius: "0 0 10px 10px", overflow: "hidden" }}>
+              <div style={{ background: "#FAFAF8", border: "1.5px solid #B8D9C2", borderTop: "none", borderRadius: "0 0 10px 10px", overflow: "hidden" }}>
                 {items.map((item, i) => (
-                  <div key={i} style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.7rem 1rem", borderBottom: i < items.length - 1 ? "1px solid #F0EBE1" : "none" }}>
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.7rem 1rem", borderBottom: i < items.length - 1 ? "1px solid #B8D9C2" : "none" }}>
                     <span style={{ fontSize: "1rem", flexShrink: 0 }}>{item.locked ? "🔒" : "○"}</span>
                     <div style={{ flex: 1 }}>
-                      <p style={{ fontSize: "0.86rem", fontWeight: 600, color: item.fresh ? "#BF360C" : "#2A2420" }}>{item.name}{item.fresh ? " ⚡" : ""}</p>
-                      <p style={{ fontSize: "0.73rem", color: "#9A8C82", marginTop: "0.1rem" }}>{item.note}</p>
+                      <p style={{ fontSize: "0.86rem", fontWeight: 600, color: item.fresh ? "#8C8C2A" : "#3A5C3E" }}>{item.name}{item.fresh ? " ⚡" : ""}</p>
+                      <p style={{ fontSize: "0.73rem", color: "#6B5550", marginTop: "0.1rem" }}>{item.note}</p>
                     </div>
                     {item.approxExpiry && (
-                      <span style={{ fontSize: "0.68rem", fontWeight: 600, padding: "0.2rem 0.55rem", borderRadius: 8, background: item.fresh ? "#FBE9E7" : "#F5F5F5", color: item.fresh ? "#BF360C" : "#666", flexShrink: 0, whiteSpace: "nowrap" }}>
+                      <span style={{ fontSize: "0.68rem", fontWeight: 600, padding: "0.2rem 0.55rem", borderRadius: 8, background: item.fresh ? "#ede8df" : "#F5F5F5", color: item.fresh ? "#8C8C2A" : "#666", flexShrink: 0, whiteSpace: "nowrap" }}>
                         exp ~{item.approxExpiry}
                       </span>
                     )}
@@ -366,7 +366,7 @@ function PantryPage({ onBack }) {
             </div>
           );
         })}
-        <p style={{ fontSize: "0.74rem", color: "#B5A99E", textAlign: "center", marginTop: "1rem" }}>⚡ = fresh item, use soon</p>
+        <p style={{ fontSize: "0.74rem", color: "#B8D9C2", textAlign: "center", marginTop: "1rem" }}>⚡ = fresh item, use soon</p>
       </div>
     </div>
   );
@@ -390,14 +390,14 @@ function TodayPage({ onBack }) {
   }[todayPlan.emoji]) : null;
 
   return (
-    <div style={{ fontFamily: "'Inter', sans-serif", background: "#FAF7F2", minHeight: "100vh" }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap'); *{box-sizing:border-box;margin:0;padding:0;} ol{padding-left:1.25rem;}`}</style>
+    <div style={{ fontFamily: "'Zilla Slab', serif", background: "#F5F3EF", minHeight: "100vh" }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,400&family=Zilla+Slab:wght@300;400;500;600&display=swap'); *{box-sizing:border-box;margin:0;padding:0;} ol{padding-left:1.25rem;}`}</style>
 
       {/* Header */}
-      <div style={{ background: "linear-gradient(135deg,#2C4A2E,#7A8C5E)", padding: "2rem 1.5rem 1.5rem", color: "#FAF7F2" }}>
+      <div style={{ background: "#3A5C3E", padding: "2rem 1.5rem 1.5rem", color: "#F5F3EF" }}>
         <button onClick={onBack} style={{ background: "rgba(255,255,255,0.15)", border: "none", color: "#fff", padding: "0.4rem 1rem", borderRadius: 20, cursor: "pointer", fontSize: "0.82rem", marginBottom: "1rem" }}>← Meal Plan</button>
         <p style={{ fontSize: "0.72rem", letterSpacing: "0.15em", textTransform: "uppercase", opacity: 0.7, marginBottom: "0.4rem" }}>Today</p>
-        <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "2rem", fontWeight: 700, lineHeight: 1.2 }}>{displayDate}</h1>
+        <h1 style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: "2rem", fontWeight: 700, lineHeight: 1.2 }}>{displayDate}</h1>
         {!inRange && <p style={{ opacity: 0.7, fontSize: "0.82rem", marginTop: "0.5rem" }}>Showing Sunday's plan — check back during the week</p>}
       </div>
 
@@ -405,29 +405,29 @@ function TodayPage({ onBack }) {
 
         {/* Today's Meal */}
         {todayPlan && (
-          <div style={{ background: "#fff", borderRadius: 16, border: `2px solid ${ts.bg}`, padding: "1.25rem", marginBottom: "1.5rem" }}>
+          <div style={{ background: "#FAFAF8", borderRadius: 16, border: `2px solid ${ts.bg}`, padding: "1.25rem", marginBottom: "1.5rem" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.75rem" }}>
-              <p style={{ fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#7A6E65" }}>Today's Meal</p>
+              <p style={{ fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#6B5550" }}>Today's Meal</p>
               <span style={{ fontSize: "0.7rem", fontWeight: 700, padding: "0.2rem 0.6rem", borderRadius: 10, background: ts.bg, color: ts.color }}>{ts.label}</span>
             </div>
             <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>{todayPlan.emoji}</div>
-            <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.4rem", fontWeight: 700, marginBottom: "0.4rem" }}>{todayPlan.meal}</h2>
-            <p style={{ fontSize: "0.83rem", color: "#7A6E65" }}>{todayPlan.note}</p>
+            <h2 style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: "1.4rem", fontWeight: 700, marginBottom: "0.4rem" }}>{todayPlan.meal}</h2>
+            <p style={{ fontSize: "0.83rem", color: "#6B5550" }}>{todayPlan.note}</p>
           </div>
         )}
 
         {/* Today's Recipe (collapsed inline) */}
         {todayRecipe && (
-          <div style={{ background: "#fff", borderRadius: 14, border: `1.5px solid ${todayRecipe.bg}`, marginBottom: "1.5rem", overflow: "hidden" }}>
+          <div style={{ background: "#FAFAF8", borderRadius: 14, border: `1.5px solid ${todayRecipe.bg}`, marginBottom: "1.5rem", overflow: "hidden" }}>
             <div style={{ background: todayRecipe.bg, padding: "0.7rem 1.1rem" }}>
               <p style={{ fontSize: "0.75rem", fontWeight: 700, color: todayRecipe.color, textTransform: "uppercase", letterSpacing: "0.08em" }}>Recipe</p>
             </div>
             <div style={{ padding: "1rem 1.1rem" }}>
-              <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.05rem", fontWeight: 700, marginBottom: "0.85rem" }}>{todayRecipe.title}</h3>
+              <h3 style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: "1.05rem", fontWeight: 700, marginBottom: "0.85rem" }}>{todayRecipe.title}</h3>
               <p style={{ fontSize: "0.78rem", fontWeight: 700, color: todayRecipe.color, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "0.5rem" }}>Ingredients</p>
-              <div style={{ background: "#FAF7F2", borderRadius: 8, overflow: "hidden", marginBottom: "1rem" }}>
+              <div style={{ background: "#F5F3EF", borderRadius: 8, overflow: "hidden", marginBottom: "1rem" }}>
                 {todayRecipe.ingredients.map(([ing, amt], i) => (
-                  <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "0.45rem 0.8rem", background: i % 2 === 0 ? "#FAF7F2" : "#fff", fontSize: "0.82rem" }}>
+                  <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "0.45rem 0.8rem", background: i % 2 === 0 ? "#F5F3EF" : "#fff", fontSize: "0.82rem" }}>
                     <span>{ing}</span>
                     <span style={{ color: todayRecipe.color, fontWeight: 600, marginLeft: "0.75rem", textAlign: "right" }}>{amt}</span>
                   </div>
@@ -436,7 +436,7 @@ function TodayPage({ onBack }) {
               <p style={{ fontSize: "0.78rem", fontWeight: 700, color: todayRecipe.color, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "0.5rem" }}>Method</p>
               <ol>
                 {todayRecipe.steps.map((s, i) => (
-                  <li key={i} style={{ fontSize: "0.84rem", color: "#3A3228", lineHeight: 1.6, marginBottom: "0.4rem", paddingLeft: "0.2rem" }}>{s}</li>
+                  <li key={i} style={{ fontSize: "0.84rem", color: "#3A5C3E", lineHeight: 1.6, marginBottom: "0.4rem", paddingLeft: "0.2rem" }}>{s}</li>
                 ))}
               </ol>
               {todayRecipe.link && (
@@ -451,15 +451,15 @@ function TodayPage({ onBack }) {
 
         {/* Breakfast Options */}
         <div style={{ marginBottom: "1.5rem" }}>
-          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.3rem", fontWeight: 700, marginBottom: "0.25rem" }}>Breakfast Options</h2>
-          <p style={{ fontSize: "0.82rem", color: "#7A6E65", marginBottom: "0.85rem" }}>Pick whatever sounds good. Just don't eat it alone.</p>
+          <h2 style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: "1.3rem", fontWeight: 700, marginBottom: "0.25rem" }}>Breakfast Options</h2>
+          <p style={{ fontSize: "0.82rem", color: "#6B5550", marginBottom: "0.85rem" }}>Pick whatever sounds good. Just don't eat it alone.</p>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
             {breakfasts.map((b, i) => (
-              <div key={i} style={{ background: "#fff", borderRadius: 11, padding: "0.8rem 1rem", border: "1.5px solid #EDE6DC", display: "flex", gap: "0.7rem" }}>
-                <span style={{ background: "#EEF3EC", color: "#2C4A2E", borderRadius: "50%", width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.72rem", fontWeight: 700, flexShrink: 0, marginTop: 1 }}>{i + 1}</span>
+              <div key={i} style={{ background: "#FAFAF8", borderRadius: 11, padding: "0.8rem 1rem", border: "1.5px solid #B8D9C2", display: "flex", gap: "0.7rem" }}>
+                <span style={{ background: "#B8D9C2", color: "#3A5C3E", borderRadius: "50%", width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.72rem", fontWeight: 700, flexShrink: 0, marginTop: 1 }}>{i + 1}</span>
                 <div>
                   <p style={{ fontSize: "0.85rem", fontWeight: 600, marginBottom: "0.15rem" }}>{b.name}</p>
-                  <p style={{ fontSize: "0.76rem", color: "#9A8C82" }}>{b.note}</p>
+                  <p style={{ fontSize: "0.76rem", color: "#6B5550" }}>{b.note}</p>
                 </div>
               </div>
             ))}
@@ -468,15 +468,15 @@ function TodayPage({ onBack }) {
 
         {/* Snack Options */}
         <div>
-          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.3rem", fontWeight: 700, marginBottom: "0.25rem" }}>Snack Options</h2>
-          <p style={{ fontSize: "0.82rem", color: "#7A6E65", marginBottom: "0.85rem" }}>For when appetite is low or chips are calling.</p>
+          <h2 style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: "1.3rem", fontWeight: 700, marginBottom: "0.25rem" }}>Snack Options</h2>
+          <p style={{ fontSize: "0.82rem", color: "#6B5550", marginBottom: "0.85rem" }}>For when appetite is low or chips are calling.</p>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
             {snacks.map((s, i) => (
-              <div key={i} style={{ background: "#fff", borderRadius: 11, padding: "0.8rem 1rem", border: "1.5px solid #EDE6DC", display: "flex", gap: "0.75rem" }}>
+              <div key={i} style={{ background: "#FAFAF8", borderRadius: 11, padding: "0.8rem 1rem", border: "1.5px solid #B8D9C2", display: "flex", gap: "0.75rem" }}>
                 <span style={{ fontSize: "1.4rem", flexShrink: 0 }}>{s.emoji}</span>
                 <div>
                   <p style={{ fontSize: "0.85rem", fontWeight: 600, marginBottom: "0.15rem" }}>{s.name}</p>
-                  <p style={{ fontSize: "0.76rem", color: "#9A8C82", lineHeight: 1.45 }}>{s.why}</p>
+                  <p style={{ fontSize: "0.76rem", color: "#6B5550", lineHeight: 1.45 }}>{s.why}</p>
                 </div>
               </div>
             ))}
@@ -497,8 +497,24 @@ function MealPlanPage({ onNavigate }) {
   const toggleCheck = (key) => setCheckedItems(prev => ({ ...prev, [key]: !prev[key] }));
   const scrollTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-    setActiveSection(id);
   };
+
+  // Scroll-spy: update active nav based on which section is in view
+  useEffect(() => {
+    const sectionIds = ["week", "shopping", "recipes", "snacks", "archive"];
+    const observers = [];
+    const handler = (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) setActiveSection(entry.target.id);
+      });
+    };
+    const obs = new IntersectionObserver(handler, { rootMargin: "-40% 0px -55% 0px", threshold: 0 });
+    sectionIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { obs.observe(el); observers.push(el); }
+    });
+    return () => observers.forEach(el => obs.unobserve(el));
+  });
 
   const navItems = [
     { id: "week", label: "Week" },
@@ -509,18 +525,18 @@ function MealPlanPage({ onNavigate }) {
   ];
 
   return (
-    <div style={{ fontFamily: "'Inter', sans-serif", background: "#FAF7F2", minHeight: "100vh", color: "#2A2420" }}>
+    <div style={{ fontFamily: "'Zilla Slab', serif", background: "#F5F3EF", minHeight: "100vh", color: "#3A5C3E" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,400&family=Zilla+Slab:wght@300;400;500;600&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #FAF7F2; }
+        body { background: #F5F3EF; }
         .recipe-card { transition: box-shadow 0.2s; }
         .recipe-card:hover { box-shadow: 0 8px 32px rgba(44,74,46,0.13); }
         .nav-btn { transition: all 0.15s; }
-        .nav-btn:hover { background: #2C4A2E !important; color: #fff !important; }
+        .nav-btn:hover { background: #3A5C3E !important; color: #fff !important; }
         .check-row:hover { background: rgba(44,74,46,0.04); }
-        .today-btn:hover { background: #fff !important; color: #2C4A2E !important; }
-        a { color: #2C4A2E; }
+        .today-btn:hover { background: #fff !important; color: #3A5C3E !important; }
+        a { color: #3A5C3E; }
         @media (max-width: 600px) {
           .hero-title { font-size: 2rem !important; }
           .day-grid { grid-template-columns: 1fr 1fr !important; }
@@ -529,25 +545,25 @@ function MealPlanPage({ onNavigate }) {
       `}</style>
 
       {/* Hero */}
-      <div style={{ background: "linear-gradient(135deg, #2C4A2E 0%, #3D6640 60%, #7A8C5E 100%)", padding: "2.5rem 1.5rem 1.75rem", color: "#FAF7F2" }}>
+      <div style={{ background: "#3A5C3E", padding: "2.5rem 1.5rem 1.75rem", color: "#F5F3EF" }}>
         <div style={{ maxWidth: 720, margin: "0 auto" }}>
           <div className="top-btns" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem", gap: "0.75rem" }}>
-            <p style={{ fontSize: "0.75rem", letterSpacing: "0.15em", textTransform: "uppercase", opacity: 0.7, fontFamily: "Inter" }}>This Week's Meal Plan</p>
+            <p style={{ fontSize: "0.75rem", letterSpacing: "0.15em", textTransform: "uppercase", opacity: 0.7, fontFamily: "Zilla Slab" }}>This Week's Meal Plan</p>
             <div style={{ display: "flex", gap: "0.5rem" }}>
               <button className="today-btn" onClick={() => onNavigate("today")} style={{ background: "rgba(255,255,255,0.2)", border: "1.5px solid rgba(255,255,255,0.5)", color: "#fff", padding: "0.35rem 0.9rem", borderRadius: 20, cursor: "pointer", fontSize: "0.78rem", fontWeight: 600, transition: "all 0.15s" }}>📅 Today</button>
               <button className="today-btn" onClick={() => onNavigate("pantry")} style={{ background: "rgba(255,255,255,0.2)", border: "1.5px solid rgba(255,255,255,0.5)", color: "#fff", padding: "0.35rem 0.9rem", borderRadius: 20, cursor: "pointer", fontSize: "0.78rem", fontWeight: 600, transition: "all 0.15s" }}>🧺 Pantry</button>
             </div>
           </div>
-          <h1 className="hero-title" style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.6rem", fontWeight: 700, lineHeight: 1.15 }}>{WEEK}</h1>
+          <h1 className="hero-title" style={{ fontFamily: "'Georgia', serif", fontSize: "2.6rem", fontWeight: 700, lineHeight: 1.15 }}>{WEEK}</h1>
         </div>
       </div>
 
       {/* Sticky Nav */}
-      <div style={{ position: "sticky", top: 0, zIndex: 100, background: "#FAF7F2", borderBottom: "1.5px solid #E8E0D5", padding: "0.6rem 1.5rem" }}>
+      <div style={{ position: "sticky", top: 0, zIndex: 100, background: "#F5F3EF", borderBottom: "1.5px solid #B8D9C2", padding: "0.6rem 1.5rem" }}>
         <div style={{ maxWidth: 720, margin: "0 auto", display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
           {navItems.map(n => (
             <button key={n.id} className="nav-btn" onClick={() => scrollTo(n.id)}
-              style={{ fontFamily: "Inter", fontSize: "0.82rem", fontWeight: 600, padding: "0.4rem 1rem", borderRadius: 20, border: "1.5px solid #2C4A2E", background: activeSection === n.id ? "#2C4A2E" : "transparent", color: activeSection === n.id ? "#fff" : "#2C4A2E", cursor: "pointer", letterSpacing: "0.02em" }}>
+              style={{ fontFamily: "Zilla Slab", fontSize: "0.82rem", fontWeight: 600, padding: "0.4rem 1rem", borderRadius: 20, border: "1.5px solid #3A5C3E", background: activeSection === n.id ? "#3A5C3E" : "transparent", color: activeSection === n.id ? "#fff" : "#3A5C3E", cursor: "pointer", letterSpacing: "0.02em" }}>
               {n.label}
             </button>
           ))}
@@ -558,20 +574,20 @@ function MealPlanPage({ onNavigate }) {
 
         {/* WEEK AT A GLANCE */}
         <section id="week" style={{ paddingTop: "2.5rem" }}>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem" }}>Week at a Glance</h2>
-          <p style={{ color: "#7A6E65", fontSize: "0.88rem", marginBottom: "1.5rem" }}>One main meal a day. Breakfast is separate. Leftovers do the heavy lifting.</p>
+          <h2 style={{ fontFamily: "'Georgia', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem" }}>Week at a Glance</h2>
+          <p style={{ color: "#6B5550", fontSize: "0.88rem", marginBottom: "1.5rem" }}>One main meal a day. Breakfast is separate. Leftovers do the heavy lifting.</p>
           <div className="day-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "0.75rem" }}>
             {dayPlan.map(d => {
               const ts = tagStyles[d.tag];
               return (
-                <div key={d.day} style={{ background: "#fff", borderRadius: 14, padding: "1rem", border: "1.5px solid #EDE6DC", boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}>
+                <div key={d.day} style={{ background: "#FAFAF8", borderRadius: 14, padding: "1rem", border: "1.5px solid #B8D9C2", boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.4rem" }}>
-                    <span style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700, fontSize: "1.05rem", color: "#2C4A2E" }}>{d.day}</span>
+                    <span style={{ fontFamily: "'Georgia', serif", fontWeight: 700, fontSize: "1.05rem", color: "#3A5C3E" }}>{d.day}</span>
                     <span style={{ fontSize: "0.65rem", fontWeight: 600, padding: "0.15rem 0.5rem", borderRadius: 10, background: ts.bg, color: ts.color }}>{ts.label}</span>
                   </div>
                   <div style={{ fontSize: "1.3rem", marginBottom: "0.3rem" }}>{d.emoji}</div>
-                  <p style={{ fontSize: "0.82rem", fontWeight: 600, color: "#2A2420", lineHeight: 1.3, marginBottom: "0.3rem" }}>{d.meal}</p>
-                  <p style={{ fontSize: "0.73rem", color: "#9A8C82", lineHeight: 1.4 }}>{d.note}</p>
+                  <p style={{ fontSize: "0.82rem", fontWeight: 600, color: "#3A5C3E", lineHeight: 1.3, marginBottom: "0.3rem" }}>{d.meal}</p>
+                  <p style={{ fontSize: "0.73rem", color: "#6B5550", lineHeight: 1.4 }}>{d.note}</p>
                 </div>
               );
             })}
@@ -580,15 +596,15 @@ function MealPlanPage({ onNavigate }) {
 
         {/* BREAKFAST */}
         <section style={{ paddingTop: "2.5rem" }}>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem" }}>Breakfast Rotation</h2>
-          <p style={{ color: "#7A6E65", fontSize: "0.88rem", marginBottom: "1.25rem" }}>Small but protein-anchored. Hash brown is always an option — just don't eat it alone.</p>
+          <h2 style={{ fontFamily: "'Georgia', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem" }}>Breakfast Rotation</h2>
+          <p style={{ color: "#6B5550", fontSize: "0.88rem", marginBottom: "1.25rem" }}>Small but protein-anchored. Hash brown is always an option — just don't eat it alone.</p>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
             {breakfasts.map((b, i) => (
-              <div key={i} style={{ background: "#fff", borderRadius: 12, padding: "0.9rem 1.1rem", border: "1.5px solid #EDE6DC", display: "flex", gap: "0.75rem", alignItems: "flex-start" }}>
-                <span style={{ background: "#EEF3EC", color: "#2C4A2E", borderRadius: "50%", width: 26, height: 26, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.75rem", fontWeight: 700, flexShrink: 0, marginTop: 1 }}>{i + 1}</span>
+              <div key={i} style={{ background: "#FAFAF8", borderRadius: 12, padding: "0.9rem 1.1rem", border: "1.5px solid #B8D9C2", display: "flex", gap: "0.75rem", alignItems: "flex-start" }}>
+                <span style={{ background: "#B8D9C2", color: "#3A5C3E", borderRadius: "50%", width: 26, height: 26, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.75rem", fontWeight: 700, flexShrink: 0, marginTop: 1 }}>{i + 1}</span>
                 <div>
                   <p style={{ fontSize: "0.88rem", fontWeight: 600, marginBottom: "0.15rem" }}>{b.name}</p>
-                  <p style={{ fontSize: "0.78rem", color: "#9A8C82" }}>{b.note}</p>
+                  <p style={{ fontSize: "0.78rem", color: "#6B5550" }}>{b.note}</p>
                 </div>
               </div>
             ))}
@@ -597,25 +613,25 @@ function MealPlanPage({ onNavigate }) {
 
         {/* SHOPPING LIST */}
         <section id="shopping" style={{ paddingTop: "2.5rem" }}>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem" }}>Shopping List</h2>
-          <p style={{ color: "#7A6E65", fontSize: "0.88rem", marginBottom: "1.5rem" }}>Tap to check off as you shop. ✓ Have = confirmed in fridge or haul.</p>
+          <h2 style={{ fontFamily: "'Georgia', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem" }}>Shopping List</h2>
+          <p style={{ color: "#6B5550", fontSize: "0.88rem", marginBottom: "1.5rem" }}>Tap to check off as you shop. ✓ Have = confirmed in fridge or haul.</p>
           {shoppingCategories.map((cat, ci) => (
             <div key={ci} style={{ marginBottom: "1.25rem" }}>
               <div style={{ background: cat.color, color: "#fff", borderRadius: "10px 10px 0 0", padding: "0.6rem 1rem", fontSize: "0.82rem", fontWeight: 700 }}>{cat.name}</div>
-              <div style={{ background: "#fff", border: "1.5px solid #EDE6DC", borderTop: "none", borderRadius: "0 0 10px 10px", overflow: "hidden" }}>
+              <div style={{ background: "#FAFAF8", border: "1.5px solid #B8D9C2", borderTop: "none", borderRadius: "0 0 10px 10px", overflow: "hidden" }}>
                 {cat.items.map((item, ii) => {
                   const key = `${ci}-${ii}`;
                   const checked = checkedItems[key];
                   const ss = statusStyle[item.status];
                   return (
                     <div key={ii} className="check-row" onClick={() => toggleCheck(key)}
-                      style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.75rem 1rem", borderBottom: ii < cat.items.length - 1 ? "1px solid #F0EBE1" : "none", cursor: "pointer", opacity: checked ? 0.45 : 1, transition: "opacity 0.2s" }}>
-                      <div style={{ width: 22, height: 22, borderRadius: 6, border: `2px solid ${checked ? cat.color : "#C8BEB4"}`, background: checked ? cat.color : "transparent", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.15s" }}>
+                      style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.75rem 1rem", borderBottom: ii < cat.items.length - 1 ? "1px solid #B8D9C2" : "none", cursor: "pointer", opacity: checked ? 0.45 : 1, transition: "opacity 0.2s" }}>
+                      <div style={{ width: 22, height: 22, borderRadius: 6, border: `2px solid ${checked ? cat.color : "#B8D9C2"}`, background: checked ? cat.color : "transparent", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.15s" }}>
                         {checked && <span style={{ color: "#fff", fontSize: "0.75rem", fontWeight: 700 }}>✓</span>}
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <p style={{ fontSize: "0.88rem", fontWeight: 600, textDecoration: checked ? "line-through" : "none", color: "#2A2420" }}>{item.item}</p>
-                        <p style={{ fontSize: "0.74rem", color: "#9A8C82", marginTop: "0.1rem" }}>{item.note || item.use}{item.qty && item.qty !== "—" ? ` · ${item.qty}` : ""}</p>
+                        <p style={{ fontSize: "0.88rem", fontWeight: 600, textDecoration: checked ? "line-through" : "none", color: "#3A5C3E" }}>{item.item}</p>
+                        <p style={{ fontSize: "0.74rem", color: "#6B5550", marginTop: "0.1rem" }}>{item.note || item.use}{item.qty && item.qty !== "—" ? ` · ${item.qty}` : ""}</p>
                       </div>
                       <span style={{ fontSize: "0.68rem", fontWeight: 700, padding: "0.2rem 0.55rem", borderRadius: 8, background: ss.bg, color: ss.color, flexShrink: 0 }}>{ss.label}</span>
                     </div>
@@ -628,31 +644,31 @@ function MealPlanPage({ onNavigate }) {
 
         {/* RECIPES */}
         <section id="recipes" style={{ paddingTop: "2.5rem" }}>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem" }}>Recipes</h2>
-          <p style={{ color: "#7A6E65", fontSize: "0.88rem", marginBottom: "1.5rem" }}>Tap any recipe to expand it.</p>
+          <h2 style={{ fontFamily: "'Georgia', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem" }}>Recipes</h2>
+          <p style={{ color: "#6B5550", fontSize: "0.88rem", marginBottom: "1.5rem" }}>Tap any recipe to expand it.</p>
           <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
             {recipes.map(r => {
               const isOpen = openRecipe === r.id;
               return (
-                <div key={r.id} className="recipe-card" style={{ background: "#fff", borderRadius: 16, border: `2px solid ${isOpen ? r.color : "#EDE6DC"}`, overflow: "hidden", transition: "border-color 0.2s, box-shadow 0.2s" }}>
+                <div key={r.id} className="recipe-card" style={{ background: "#FAFAF8", borderRadius: 16, border: `2px solid ${isOpen ? r.color : "#B8D9C2"}`, overflow: "hidden", transition: "border-color 0.2s, box-shadow 0.2s" }}>
                   <div onClick={() => setOpenRecipe(isOpen ? null : r.id)} style={{ padding: "1.1rem 1.25rem", cursor: "pointer", display: "flex", gap: "1rem", alignItems: "flex-start" }}>
                     <span style={{ fontSize: "2rem", flexShrink: 0 }}>{r.emoji}</span>
                     <div style={{ flex: 1 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.2rem", flexWrap: "wrap" }}>
                         <p style={{ fontSize: "0.7rem", color: r.color, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em" }}>{r.when}</p>
-                        <span style={{ fontSize: "0.62rem", fontWeight: 700, padding: "0.15rem 0.5rem", borderRadius: 8, background: r.type === "ig" ? "#FFF8E1" : "#E8F0FB", color: r.type === "ig" ? "#B45309" : "#1565C0", border: r.type === "ig" ? "1px solid #FDE68A" : "1px solid #BFDBFE" }}>
+                        <span style={{ fontSize: "0.62rem", fontWeight: 700, padding: "0.15rem 0.5rem", borderRadius: 8, background: r.type === "ig" ? "#FFF8E1" : "#B8D9C2", color: r.type === "ig" ? "#B45309" : "#3A5C3E", border: r.type === "ig" ? "1px solid #FDE68A" : "1px solid #BFDBFE" }}>
                           {r.type === "ig" ? "📱 From IG saves" : "✦ Claude-built"}
                         </span>
                       </div>
-                      <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.1rem", fontWeight: 700, lineHeight: 1.25, marginBottom: "0.4rem" }}>{r.title}</h3>
-                      <p style={{ fontSize: "0.74rem", color: "#9A8C82" }}>{r.source}</p>
+                      <h3 style={{ fontFamily: "'Georgia', serif", fontSize: "1.1rem", fontWeight: 700, lineHeight: 1.25, marginBottom: "0.4rem" }}>{r.title}</h3>
+                      <p style={{ fontSize: "0.74rem", color: "#6B5550" }}>{r.source}</p>
                       <div style={{ display: "flex", gap: "0.5rem", marginTop: "0.6rem", flexWrap: "wrap" }}>
                         {[["⏱", r.time], ["🍽", r.serves], ["💪", r.protein]].map(([icon, val]) => (
                           <span key={val} style={{ fontSize: "0.72rem", background: r.bg, color: r.color, padding: "0.2rem 0.55rem", borderRadius: 8, fontWeight: 600 }}>{icon} {val}</span>
                         ))}
                       </div>
                     </div>
-                    <span style={{ color: "#C8BEB4", fontSize: "1.2rem", flexShrink: 0, marginTop: 4 }}>{isOpen ? "▲" : "▼"}</span>
+                    <span style={{ color: "#B8D9C2", fontSize: "1.2rem", flexShrink: 0, marginTop: 4 }}>{isOpen ? "▲" : "▼"}</span>
                   </div>
                   {isOpen && (
                     <div style={{ borderTop: `1.5px solid ${r.bg}`, padding: "1.25rem" }}>
@@ -663,10 +679,10 @@ function MealPlanPage({ onNavigate }) {
                         </div>
                       )}
                       <h4 style={{ fontSize: "0.8rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: r.color, marginBottom: "0.75rem" }}>Ingredients</h4>
-                      <div style={{ background: "#FAF7F2", borderRadius: 10, overflow: "hidden", marginBottom: "1.25rem" }}>
+                      <div style={{ background: "#F5F3EF", borderRadius: 10, overflow: "hidden", marginBottom: "1.25rem" }}>
                         {r.ingredients.map(([ing, amt], i) => (
-                          <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "0.55rem 0.9rem", background: i % 2 === 0 ? "#FAF7F2" : "#fff", fontSize: "0.84rem" }}>
-                            <span style={{ color: "#2A2420" }}>{ing}</span>
+                          <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "0.55rem 0.9rem", background: i % 2 === 0 ? "#F5F3EF" : "#fff", fontSize: "0.84rem" }}>
+                            <span style={{ color: "#3A5C3E" }}>{ing}</span>
                             <span style={{ color: r.color, fontWeight: 600, textAlign: "right", marginLeft: "1rem" }}>{amt}</span>
                           </div>
                         ))}
@@ -674,7 +690,7 @@ function MealPlanPage({ onNavigate }) {
                       <h4 style={{ fontSize: "0.8rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: r.color, marginBottom: "0.75rem" }}>Method</h4>
                       <ol style={{ paddingLeft: "1.25rem", marginBottom: "1.25rem" }}>
                         {r.steps.map((s, i) => (
-                          <li key={i} style={{ fontSize: "0.86rem", color: "#3A3228", lineHeight: 1.6, marginBottom: "0.5rem", paddingLeft: "0.25rem" }}>{s}</li>
+                          <li key={i} style={{ fontSize: "0.86rem", color: "#3A5C3E", lineHeight: 1.6, marginBottom: "0.5rem", paddingLeft: "0.25rem" }}>{s}</li>
                         ))}
                       </ol>
                       {r.notes.length > 0 && (
@@ -683,7 +699,7 @@ function MealPlanPage({ onNavigate }) {
                           {r.notes.map((n, i) => (
                             <div key={i} style={{ display: "flex", gap: "0.5rem", marginBottom: "0.4rem", alignItems: "flex-start" }}>
                               <span style={{ color: r.color, flexShrink: 0, marginTop: 2 }}>💡</span>
-                              <p style={{ fontSize: "0.82rem", color: "#5A4E45", lineHeight: 1.55, fontStyle: "italic" }}>{n}</p>
+                              <p style={{ fontSize: "0.82rem", color: "#3A5C3E", lineHeight: 1.55, fontStyle: "italic" }}>{n}</p>
                             </div>
                           ))}
                         </>
@@ -698,15 +714,15 @@ function MealPlanPage({ onNavigate }) {
 
         {/* SNACKS */}
         <section id="snacks" style={{ paddingTop: "2.5rem" }}>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem" }}>Snack Rotation</h2>
-          <p style={{ color: "#7A6E65", fontSize: "0.88rem", marginBottom: "1.25rem" }}>For days when appetite is low or chips are calling.</p>
+          <h2 style={{ fontFamily: "'Georgia', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem" }}>Snack Rotation</h2>
+          <p style={{ color: "#6B5550", fontSize: "0.88rem", marginBottom: "1.25rem" }}>For days when appetite is low or chips are calling.</p>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
             {snacks.map((s, i) => (
-              <div key={i} style={{ background: "#fff", borderRadius: 12, padding: "0.9rem 1.1rem", border: "1.5px solid #EDE6DC", display: "flex", gap: "0.9rem", alignItems: "flex-start" }}>
+              <div key={i} style={{ background: "#FAFAF8", borderRadius: 12, padding: "0.9rem 1.1rem", border: "1.5px solid #B8D9C2", display: "flex", gap: "0.9rem", alignItems: "flex-start" }}>
                 <span style={{ fontSize: "1.5rem", flexShrink: 0 }}>{s.emoji}</span>
                 <div>
                   <p style={{ fontSize: "0.88rem", fontWeight: 600, marginBottom: "0.2rem" }}>{s.name}</p>
-                  <p style={{ fontSize: "0.78rem", color: "#9A8C82", lineHeight: 1.5 }}>{s.why}</p>
+                  <p style={{ fontSize: "0.78rem", color: "#6B5550", lineHeight: 1.5 }}>{s.why}</p>
                 </div>
               </div>
             ))}
@@ -715,18 +731,18 @@ function MealPlanPage({ onNavigate }) {
 
         {/* ARCHIVE */}
         <section id="archive" style={{ paddingTop: "2.5rem" }}>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem" }}>Past Weeks</h2>
-          <p style={{ color: "#7A6E65", fontSize: "0.88rem", marginBottom: "1.25rem" }}>Previous meal plans will live here as each week rolls over.</p>
-          <div style={{ background: "#fff", borderRadius: 14, border: "1.5px dashed #D4C5B0", padding: "2.5rem 1.5rem", textAlign: "center" }}>
+          <h2 style={{ fontFamily: "'Georgia', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem" }}>Past Weeks</h2>
+          <p style={{ color: "#6B5550", fontSize: "0.88rem", marginBottom: "1.25rem" }}>Previous meal plans will live here as each week rolls over.</p>
+          <div style={{ background: "#FAFAF8", borderRadius: 14, border: "1.5px dashed #B8D9C2", padding: "2.5rem 1.5rem", textAlign: "center" }}>
             <p style={{ fontSize: "2rem", marginBottom: "0.75rem" }}>📂</p>
-            <p style={{ fontSize: "0.9rem", fontWeight: 600, color: "#2A2420", marginBottom: "0.35rem" }}>Nothing here yet</p>
-            <p style={{ fontSize: "0.8rem", color: "#9A8C82" }}>This week's plan will move here when next week's is ready.</p>
+            <p style={{ fontSize: "0.9rem", fontWeight: 600, color: "#3A5C3E", marginBottom: "0.35rem" }}>Nothing here yet</p>
+            <p style={{ fontSize: "0.8rem", color: "#6B5550" }}>This week's plan will move here when next week's is ready.</p>
           </div>
         </section>
 
         {/* Footer */}
-        <div style={{ marginTop: "3rem", paddingTop: "1.5rem", borderTop: "1.5px solid #EDE6DC", textAlign: "center" }}>
-          <p style={{ fontSize: "0.75rem", color: "#B5A99E" }}>Built with Claude · Week of {WEEK}</p>
+        <div style={{ marginTop: "3rem", paddingTop: "1.5rem", borderTop: "1.5px solid #B8D9C2", textAlign: "center" }}>
+          <p style={{ fontSize: "0.75rem", color: "#B8D9C2" }}>Built with Claude · Week of {WEEK}</p>
         </div>
       </div>
     </div>
