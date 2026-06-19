@@ -54,12 +54,12 @@ const WEEK = "June 15 – 21, 2026";
 const WEEK_START = new Date("2026-06-15");
 
 const dayPlan = [
-  { day: "Sun", label: "Sunday",    meal: "Skirt Steak + Charred Corn Salad", note: "Cook after paddleboarding. Use the corn before it turns.", tag: "cook",     emoji: "🥩", date: "2026-06-15" },
-  { day: "Mon", label: "Monday",    meal: "Leftover steak salad",              note: "Eat before or after pickleball",                          tag: "leftover", emoji: "🥗", date: "2026-06-16" },
-  { day: "Tue", label: "Tuesday",   meal: "Baguette sandwich",                 note: "Use the baguette — it won't last past today. Brit's evening.", tag: "easy", emoji: "🥖", date: "2026-06-17" },
+  { day: "Sun", label: "Sunday",    meal: "Skirt Steak + Charred Corn Salad", note: "Cook after paddleboarding. Use the corn before it turns.", tag: "cook",     emoji: "🥩", date: "2026-06-15", events: ["Tentative - Paddleboarding · 2–5pm"] },
+  { day: "Mon", label: "Monday",    meal: "Leftover steak salad",              note: "Eat before or after pickleball",                          tag: "leftover", emoji: "🥗", date: "2026-06-16", events: ["Pickleball · 12–2pm"] },
+  { day: "Tue", label: "Tuesday",   meal: "Baguette sandwich",                 note: "Use the baguette — it won't last past today. Brit's evening.", tag: "easy", emoji: "🥖", date: "2026-06-17", events: ["Floral Arrangements with Brit · 6–9pm"] },
   { day: "Wed", label: "Wednesday", meal: "Chimichurri Chicken Bowl",          note: "Cook tonight — oven does the work",                       tag: "cook",     emoji: "🍗", date: "2026-06-18" },
   { day: "Thu", label: "Thursday",  meal: "Leftover chimichurri chicken",      note: "Reheat during lunch block",                               tag: "leftover", emoji: "🍗", date: "2026-06-19" },
-  { day: "Fri", label: "Friday",    meal: "Al Pastor Romaine Tacos",           note: "Juneteenth — open day, zero pressure",                    tag: "easy",     emoji: "🌮", date: "2026-06-20" },
+  { day: "Fri", label: "Friday",    meal: "Al Pastor Romaine Tacos",           note: "Juneteenth — open day, zero pressure",                    tag: "easy",     emoji: "🌮", date: "2026-06-20", events: ["Holiday: Juneteenth (no work)"] },
   { day: "Sat", label: "Saturday",  meal: "Wild card",                         note: "Eat out or reset into next week",                         tag: "free",     emoji: "✨", date: "2026-06-21" },
 ];
 
@@ -214,7 +214,7 @@ const recipes = [
     source: "IG Save #47 — Klara Moderski",
     link: "https://www.instagram.com/reel/DX90W3LS6-t/",
     linkNote: "Full recipe in the reel caption",
-    when: "Sunday · Make while the steak rests",
+    when: "Sunday · Cook Session 1",
     serves: "All week", protein: "+3–5g per use", time: "10 min",
     color: "#3d2a4a", bg: "#ede8f5",
     ingredients: [
@@ -242,7 +242,7 @@ const recipes = [
     title: "Truffle Aioli Baguette Sandwich",
     source: "Built around your haul — baguette needs to be used by Tue",
     link: null,
-    when: "Tuesday · Easy meal before Brit's",
+    when: "Tuesday · No cook — assembly only",
     serves: "1", protein: "~25–30g (with protein)", time: "5 min",
     color: "#8C8C2A", bg: "#f5f3e0",
     ingredients: [
@@ -299,7 +299,7 @@ const recipes = [
     title: "Al Pastor Romaine Tacos",
     source: "Built around your freezer + garden romaine",
     link: null,
-    when: "Friday · ~15 min",
+    when: "Friday · Light cooking",
     serves: "1–2", protein: "~30g", time: "15 min",
     color: "#6B5550", bg: "#ede8e2",
     ingredients: [
@@ -341,8 +341,8 @@ function PantryPage({ onBack }) {
         <h1 style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: "2rem", fontWeight: 700, color: "#F5F3EF" }}>What You Have</h1>
         <p style={{ opacity: 0.8, fontSize: "0.85rem", marginTop: "0.5rem" }}>🔒 Locked = confirmed from photo · ○ Assumed = verify not expired · ⚡ = fresh item, use soon</p>
       </div>
-      <div style={{ maxWidth: 720, margin: "0 auto", padding: "1.5rem 1.25rem 4rem" }}>
-        {categories.map(cat => {
+      <div style={{ maxWidth: 720, margin: "0 auto", padding: "1.5rem 1.25rem 4rem", textAlign: "left" }}>
+          {categories.map(cat => {
           const items = pantryDB.filter(i => i.category === cat);
           const col = categoryColors[cat] || "#444";
           return (
@@ -378,7 +378,7 @@ function TodayPage({ onBack }) {
   const weekStart = new Date("2026-06-15");
   const weekEnd = new Date("2026-06-21");
   const inRange = today >= weekStart && today <= weekEnd;
-  const todayStr = today.toISOString().split("T")[0];
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
   const todayPlan = inRange ? dayPlan.find(d => d.date === todayStr) : dayPlan[0];
   const displayDate = todayPlan
     ? new Date(todayPlan.date + "T12:00:00").toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })
@@ -413,7 +413,7 @@ function TodayPage({ onBack }) {
               <span style={{ fontSize: "0.7rem", fontWeight: 700, padding: "0.2rem 0.6rem", borderRadius: 10, background: ts.bg, color: ts.color }}>{ts.label}</span>
             </div>
             <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>{todayPlan.emoji}</div>
-            <h2 style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: "1.4rem", fontWeight: 700, marginBottom: "0.4rem" }}>{todayPlan.meal}</h2>
+            <h2 style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: "1.4rem", fontWeight: 700, marginBottom: "0.4rem", color:"#3A5C3E" }}>{todayPlan.meal}</h2>
             <p style={{ fontSize: "0.83rem", color: "#6B5550" }}>{todayPlan.note}</p>
           </div>
         )}
@@ -436,7 +436,7 @@ function TodayPage({ onBack }) {
                 ))}
               </div>
               <p style={{ fontSize: "0.78rem", fontWeight: 700, color: todayRecipe.color, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "0.5rem" }}>Method</p>
-              <ol>
+              <ol style={{ textAlign: "left" }}>
                 {todayRecipe.steps.map((s, i) => (
                   <li key={i} style={{ fontSize: "0.84rem", color: "#3A5C3E", lineHeight: 1.6, marginBottom: "0.4rem", paddingLeft: "0.2rem" }}>{s}</li>
                 ))}
@@ -453,13 +453,13 @@ function TodayPage({ onBack }) {
 
         {/* Breakfast Options */}
         <div style={{ marginBottom: "1.5rem" }}>
-          <h2 style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: "1.3rem", fontWeight: 700, marginBottom: "0.25rem" }}>Breakfast Options</h2>
+          <h2 style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: "1.3rem", fontWeight: 700, marginBottom: "0.25rem", color:"#3A5C3E" }}>Breakfast Options</h2>
           <p style={{ fontSize: "0.82rem", color: "#6B5550", marginBottom: "0.85rem" }}>Pick whatever sounds good. Just don't eat it alone.</p>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
             {breakfasts.map((b, i) => (
               <div key={i} style={{ background: "#FAFAF8", borderRadius: 11, padding: "0.8rem 1rem", border: "1.5px solid #B8D9C2", display: "flex", gap: "0.7rem" }}>
                 <span style={{ background: "#B8D9C2", color: "#3A5C3E", borderRadius: "50%", width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.72rem", fontWeight: 700, flexShrink: 0, marginTop: 1 }}>{i + 1}</span>
-                <div>
+                <div style={{ textAlign: "left" }}>
                   <p style={{ fontSize: "0.85rem", fontWeight: 600, marginBottom: "0.15rem" }}>{b.name}</p>
                   <p style={{ fontSize: "0.76rem", color: "#6B5550" }}>{b.note}</p>
                 </div>
@@ -470,13 +470,13 @@ function TodayPage({ onBack }) {
 
         {/* Snack Options */}
         <div>
-          <h2 style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: "1.3rem", fontWeight: 700, marginBottom: "0.25rem" }}>Snack Options</h2>
+          <h2 style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: "1.3rem", fontWeight: 700, marginBottom: "0.25rem", color:"#3A5C3E" }}>Snack Options</h2>
           <p style={{ fontSize: "0.82rem", color: "#6B5550", marginBottom: "0.85rem" }}>For when appetite is low or chips are calling.</p>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
             {snacks.map((s, i) => (
               <div key={i} style={{ background: "#FAFAF8", borderRadius: 11, padding: "0.8rem 1rem", border: "1.5px solid #B8D9C2", display: "flex", gap: "0.75rem" }}>
                 <span style={{ fontSize: "1.4rem", flexShrink: 0 }}>{s.emoji}</span>
-                <div>
+                <div style={{ textAlign: "left" }}>
                   <p style={{ fontSize: "0.85rem", fontWeight: 600, marginBottom: "0.15rem" }}>{s.name}</p>
                   <p style={{ fontSize: "0.76rem", color: "#6B5550", lineHeight: 1.45 }}>{s.why}</p>
                 </div>
@@ -578,7 +578,7 @@ function MealPlanPage({ onNavigate }) {
 
         {/* WEEK AT A GLANCE */}
         <section id="week" style={{ paddingTop: "2.5rem" }}>
-          <h2 style={{ fontFamily: "'Georgia', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem" }}>Week at a Glance</h2>
+          <h2 style={{ fontFamily: "'Georgia', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem", color: "#3A5C3E" }}>Week at a Glance</h2>
           <p style={{ color: "#6B5550", fontSize: "0.88rem", marginBottom: "1.5rem" }}>One main meal a day. Breakfast is separate. Leftovers do the heavy lifting.</p>
           <div className="day-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "0.75rem" }}>
             {dayPlan.map(d => {
@@ -592,32 +592,22 @@ function MealPlanPage({ onNavigate }) {
                   <div style={{ fontSize: "1.3rem", marginBottom: "0.3rem" }}>{d.emoji}</div>
                   <p style={{ fontSize: "0.82rem", fontWeight: 600, color: "#3A5C3E", lineHeight: 1.3, marginBottom: "0.3rem" }}>{d.meal}</p>
                   <p style={{ fontSize: "0.73rem", color: "#6B5550", lineHeight: 1.4 }}>{d.note}</p>
+                  {d.events && (
+                    <div style={{ marginTop: "0.4rem", display: "flex", flexDirection: "column", gap: "0.2rem" }}>
+                      {d.events.map((ev, i) => (
+                        <p key={i} style={{ fontSize: "0.68rem", color: "#B8A0C8", lineHeight: 1.3 }}>📅 {ev}</p>
+                        ))}
+                        </div>
+                      )}
                 </div>
               );
             })}
           </div>
         </section>
 
-        {/* BREAKFAST */}
-        <section style={{ paddingTop: "2.5rem" }}>
-          <h2 style={{ fontFamily: "'Georgia', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem" }}>Breakfast Rotation</h2>
-          <p style={{ color: "#6B5550", fontSize: "0.88rem", marginBottom: "1.25rem" }}>Small but protein-anchored. Hash brown is always an option — just don't eat it alone.</p>
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
-            {breakfasts.map((b, i) => (
-              <div key={i} style={{ background: "#FAFAF8", borderRadius: 12, padding: "0.9rem 1.1rem", border: "1.5px solid #B8D9C2", display: "flex", gap: "0.75rem", alignItems: "flex-start" }}>
-                <span style={{ background: "#B8D9C2", color: "#3A5C3E", borderRadius: "50%", width: 26, height: 26, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.75rem", fontWeight: 700, flexShrink: 0, marginTop: 1 }}>{i + 1}</span>
-                <div>
-                  <p style={{ fontSize: "0.88rem", fontWeight: 600, marginBottom: "0.15rem" }}>{b.name}</p>
-                  <p style={{ fontSize: "0.78rem", color: "#6B5550" }}>{b.note}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
         {/* SHOPPING LIST */}
         <section id="shopping" style={{ paddingTop: "2.5rem" }}>
-          <h2 style={{ fontFamily: "'Georgia', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem" }}>Shopping List</h2>
+          <h2 style={{ fontFamily: "'Georgia', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem", color: "#3A5C3E" }}>Shopping List</h2>
           <p style={{ color: "#6B5550", fontSize: "0.88rem", marginBottom: "1.5rem" }}>Tap to check off as you shop. ✓ Have = confirmed in fridge or haul.</p>
           {shoppingCategories.map((cat, ci) => (
             <div key={ci} style={{ marginBottom: "1.25rem" }}>
@@ -648,7 +638,7 @@ function MealPlanPage({ onNavigate }) {
 
         {/* RECIPES */}
         <section id="recipes" style={{ paddingTop: "2.5rem" }}>
-          <h2 style={{ fontFamily: "'Georgia', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem" }}>Recipes</h2>
+          <h2 style={{ fontFamily: "'Georgia', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem", color: "#3A5C3E" }}>Recipes</h2>
           <p style={{ color: "#6B5550", fontSize: "0.88rem", marginBottom: "1.5rem" }}>Tap any recipe to expand it.</p>
           <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
             {recipes.map(r => {
@@ -660,13 +650,13 @@ function MealPlanPage({ onNavigate }) {
                     <div style={{ flex: 1 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.2rem", flexWrap: "wrap" }}>
                         <p style={{ fontSize: "0.7rem", color: r.color, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em" }}>{r.when}</p>
-                        <span style={{ fontSize: "0.62rem", fontWeight: 700, padding: "0.15rem 0.5rem", borderRadius: 8, background: r.type === "ig" ? "#FFF8E1" : "#B8D9C2", color: r.type === "ig" ? "#B45309" : "#3A5C3E", border: r.type === "ig" ? "1px solid #FDE68A" : "1px solid #BFDBFE" }}>
+                        <span style={{ fontSize: "0.62rem", fontWeight: 700, padding: "0rem 0.5rem", borderRadius: 8, background: r.type === "ig" ? "#FFF8E1" : "#B8D9C2", color: r.type === "ig" ? "#B45309" : "#3A5C3E", border: r.type === "ig" ? "1px solid #FDE68A" : "1px solid #BFDBFE" }}>
                           {r.type === "ig" ? "📱 From IG saves" : "✦ Claude-built"}
                         </span>
                       </div>
-                      <h3 style={{ fontFamily: "'Georgia', serif", fontSize: "1.1rem", fontWeight: 700, lineHeight: 1.25, marginBottom: "0.4rem" }}>{r.title}</h3>
+                      <h3 style={{ fontFamily: "'Georgia', serif", fontSize: "1.1rem", fontWeight: 700, lineHeight: 1.25, marginBottom: "0.4rem", marginTop: "0.4rem" }}>{r.title}</h3>
                       <p style={{ fontSize: "0.74rem", color: "#6B5550" }}>{r.source}</p>
-                      <div style={{ display: "flex", gap: "0.5rem", marginTop: "0.6rem", flexWrap: "wrap" }}>
+                      <div style={{ display: "flex", gap: "0.5rem", marginTop: "0.6rem", flexWrap: "wrap", justifyContent: "center" }}>
                         {[["⏱", r.time], ["🍽", r.serves], ["💪", r.protein]].map(([icon, val]) => (
                           <span key={val} style={{ fontSize: "0.72rem", background: r.bg, color: r.color, padding: "0.2rem 0.55rem", borderRadius: 8, fontWeight: 600 }}>{icon} {val}</span>
                         ))}
@@ -675,8 +665,7 @@ function MealPlanPage({ onNavigate }) {
                     <span style={{ color: "#B8D9C2", fontSize: "1.2rem", flexShrink: 0, marginTop: 4 }}>{isOpen ? "▲" : "▼"}</span>
                   </div>
                   {isOpen && (
-                    <div style={{ borderTop: `1.5px solid ${r.bg}`, padding: "1.25rem" }}>
-                      {r.link && (
+                    <div style={{ borderTop: `1.5px solid ${r.bg}`, padding: "1.25rem", textAlign: "left" }}>                      {r.link && (
                         <div style={{ background: r.bg, borderRadius: 10, padding: "0.7rem 1rem", marginBottom: "1.25rem" }}>
                           <p style={{ fontSize: "0.78rem", color: r.color, fontWeight: 600, marginBottom: "0.2rem" }}>📎 {r.linkNote}</p>
                           <a href={r.link} target="_blank" rel="noreferrer" style={{ fontSize: "0.78rem", wordBreak: "break-all" }}>{r.link}</a>
@@ -716,15 +705,32 @@ function MealPlanPage({ onNavigate }) {
           </div>
         </section>
 
+        {/* BREAKFAST */}
+        <section style={{ paddingTop: "2.5rem" }}>
+          <h2 style={{ fontFamily: "'Georgia', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem", color: "#3A5C3E" }}>Breakfast Options</h2>
+          <p style={{ color: "#6B5550", fontSize: "0.88rem", marginBottom: "1.25rem" }}>Small but protein-anchored. Hash brown is always an option — just don't eat it alone.</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+            {breakfasts.map((b, i) => (
+              <div key={i} style={{ background: "#FAFAF8", borderRadius: 12, padding: "0.9rem 1.1rem", border: "1.5px solid #B8D9C2", display: "flex", gap: "0.75rem", alignItems: "flex-start" }}>
+                <span style={{ background: "#B8D9C2", color: "#3A5C3E", borderRadius: "50%", width: 26, height: 26, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.75rem", fontWeight: 700, flexShrink: 0, marginTop: 1 }}>{i + 1}</span>
+                <div style={{ textAlign: "left" }}>
+                  <p style={{ fontSize: "0.88rem", fontWeight: 600, marginBottom: "0.15rem" }}>{b.name}</p>
+                  <p style={{ fontSize: "0.78rem", color: "#6B5550" }}>{b.note}</p>
+                  </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* SNACKS */}
         <section id="snacks" style={{ paddingTop: "2.5rem" }}>
-          <h2 style={{ fontFamily: "'Georgia', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem" }}>Snack Rotation</h2>
+          <h2 style={{ fontFamily: "'Georgia', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem", color: "#3A5C3E" }}>Snack Rotation</h2>
           <p style={{ color: "#6B5550", fontSize: "0.88rem", marginBottom: "1.25rem" }}>For days when appetite is low or chips are calling.</p>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
             {snacks.map((s, i) => (
               <div key={i} style={{ background: "#FAFAF8", borderRadius: 12, padding: "0.9rem 1.1rem", border: "1.5px solid #B8D9C2", display: "flex", gap: "0.9rem", alignItems: "flex-start" }}>
                 <span style={{ fontSize: "1.5rem", flexShrink: 0 }}>{s.emoji}</span>
-                <div>
+                <div style={{ textAlign: "left" }}>
                   <p style={{ fontSize: "0.88rem", fontWeight: 600, marginBottom: "0.2rem" }}>{s.name}</p>
                   <p style={{ fontSize: "0.78rem", color: "#6B5550", lineHeight: 1.5 }}>{s.why}</p>
                 </div>
@@ -735,7 +741,7 @@ function MealPlanPage({ onNavigate }) {
 
         {/* ARCHIVE */}
         <section id="archive" style={{ paddingTop: "2.5rem" }}>
-          <h2 style={{ fontFamily: "'Georgia', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem" }}>Past Weeks</h2>
+          <h2 style={{ fontFamily: "'Georgia', serif", fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.25rem", color: "#3A5C3E" }}>Past Weeks</h2>
           <p style={{ color: "#6B5550", fontSize: "0.88rem", marginBottom: "1.25rem" }}>Previous meal plans will live here as each week rolls over.</p>
           <div style={{ background: "#FAFAF8", borderRadius: 14, border: "1.5px dashed #B8D9C2", padding: "2.5rem 1.5rem", textAlign: "center" }}>
             <p style={{ fontSize: "2rem", marginBottom: "0.75rem" }}>📂</p>

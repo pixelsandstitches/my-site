@@ -45,6 +45,17 @@ const projects = [
     descColor: '#6B5550',
     arrowColor: '#3A5C3E',
   },
+  {
+  title: 'Workout Builder',
+  description: 'A personal gym session planner with set & rep tracking, rest timers, and weight logging.',
+  path: '/workout-builder',
+  tag: 'Tool',
+  cardBg: '#3A5C3E',
+  tagColor: '#B8D9C2',
+  titleColor: '#CEC8BE',
+  descColor: '#a8c4b0',
+  arrowColor: '#B8D9C2',
+},
 ]
 
 export default function Landing() {
