@@ -565,7 +565,7 @@ export default function App() {
 const proseLg = { fontSize: 18, lineHeight: 1.7, color: COLORS.ink, marginBottom: 18 };
 const btnPrimary = { background: COLORS.dune, color: "#fff", border: "none", padding: "14px 26px", borderRadius: 8, fontSize: 16.5, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" };
 const btnGhost = { background: "rgba(255,255,255,0.14)", color: "#fff", border: "1px solid rgba(255,255,255,0.5)", padding: "14px 26px", borderRadius: 8, fontSize: 16.5, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" };
-const navCard = { background: COLORS.sandCard, border: `1px solid ${COLORS.line}`, borderRadius: 10, padding: "20px 22px", cursor: "pointer", textAlign: "left", display: "flex", flexDirection: "column", gap: 4, fontFamily: "inherit" };
+const navCard = { background: COLORS.sandCard, border: `1px solid ${COLORS.line}`, borderRadius: 10, padding: "20px 22px", cursor: "pointer", textAlign: "left", display: "flex", flexDirection: "column", gap: 4, fontFamily: "inherit", color: COLORS.ink };
 const th = { padding: "8px 10px", fontWeight: 700 };
 const td = { padding: "12px 10px", verticalAlign: "top" };
 const chip = { background: COLORS.sand, border: `1px solid ${COLORS.line}`, borderRadius: 7, padding: "8px 10px", fontSize: 14.5, textAlign: "center", color: COLORS.driftwood };
