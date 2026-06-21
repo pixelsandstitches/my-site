@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beachcrest Newsletter — Editorial Redesign Case Study</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&family=Source+Sans+3:wght@400;500;600;700&family=Nunito:wght@400;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,400;1,9..144,700&family=Zilla+Slab:wght@400;500;600&display=swap');
+
+  :root {
+    --deep-navy: #1A445D;
+    --dark-teal: #285056;
+    --teal: #4C7077;
+    --sage: #b4cbbf;
+    --deep-lavender: #9692bf;
+    --lavender: #CDCBE3;
+    --orange: #d87d38;
+    --gold: #f6bf4e;
+    --cream: #EFE6D3;
+    --paper: #FBFAF7;
+    --dark-slate: #3a4252;
+    --ink: #232323;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    color: var(--ink);
+    background: var(--paper);
+    line-height: 1.6;
+  }
+
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 32px; }
+
+  /* HERO */
+  .hero {
+    background: var(--deep-navy);
+    color: #fff;
+    padding: 100px 0 70px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-wave {
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 24px;
+  }
+  .hero-eyebrow {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 68px;
+    font-weight: 900;
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    max-width: 850px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .hero-sub {
+    font-family: 'Source Serif 4', serif;
+    font-size: 19px;
+    font-style: italic;
+    color: rgba(255,255,255,0.72);
+    margin-top: 24px;
+    max-width: 800px;
+    line-height: 1.5;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 36px;
+    margin-top: 48px;
+    flex-wrap: wrap;
+  }
+  .hero-meta-item {
+    font-family: 'Source Sans 3', sans-serif;
+  }
+  .hero-meta-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 4px;
+  }
+  .hero-meta-value {
+    font-size: 14px;
+    color: #fff;
+  }
+
+  /* SECTION LABELS */
+  .section { padding: 80px 0; }
+  .section-eyebrow {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 700;
+    color: var(--dark-teal);
+    line-height: 1.15;
+    margin-bottom: 18px;
+    max-width: 800px;
+  }
+  .section-lede {
+    font-size: 18px;
+    color: var(--ink);
+    max-width: 800px;
+    margin-bottom: 44px;
+    line-height: 1.6;
+  }
+
+  /* THE PROBLEM */
+  .problem-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--dark-teal);
+    line-height: 1.4;
+    border-left: 4px solid var(--orange);
+    padding-left: 28px;
+    margin: 36px 0;
+    max-width: 800px;
+  }
+  .problem-quote cite {
+    display: block;
+    font-family: 'Source Sans 3', sans-serif;
+    font-style: normal;
+    font-size: 13px;
+    color: var(--deep-navy);
+    margin-top: 14px;
+    letter-spacing: 0.02em;
+  }
+
+  /* SECTION SYSTEM GRID */
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: 8px;
+  }
+  .sys-card {
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #E4E0D6;
+  }
+  .sys-card-top {
+    height: 6px;
+  }
+  .sys-card-body {
+    padding: 22px 20px 24px;
+    background: #fff;
+  }
+  .sys-card-tag {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .sys-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--dark-teal);
+    margin-bottom: 10px;
+    line-height: 1.25;
+  }
+  .sys-card-desc {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+
+  /* PRINCIPLE STATEMENT BLOCK */
+  .principle-block {
+    background: var(--dark-teal);
+    border-radius: 8px;
+    padding: 56px 60px;
+    margin: 8px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .principle-tag {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+  .principle-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.35;
+    max-width: 800px;
+  }
+  .principle-sub {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+    margin-top: 20px;
+    max-width: 800px;
+    line-height: 1.6;
+  }
+
+  /* BEFORE / AFTER */
+  .ba-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 8px;
+  }
+  .ba-card {
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #E4E0D6;
+  }
+  .ba-header {
+    padding: 14px 20px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .ba-body {
+    background: #fff;
+    padding: 22px 20px;
+  }
+  .ba-body p {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13.5px;
+    color: var(--ink);
+    line-height: 1.65;
+    margin-bottom: 10px;
+  }
+  .ba-body p:last-child { margin-bottom: 0; }
+
+  /* PAGINATION TIERS */
+  .tier-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 8px;
+  }
+  .tier-box {
+    text-align: center;
+    border: 1px solid #E4E0D6;
+    border-radius: 6px;
+    padding: 28px 16px;
+    background: #fff;
+  }
+  .tier-label {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--deep-navy);
+    margin-bottom: 10px;
+  }
+  .tier-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 46px;
+    font-weight: 900;
+    color: var(--dark-teal);
+    line-height: 1;
+  }
+  .tier-unit {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    color: var(--deep-navy);
+    margin-top: 4px;
+  }
+
+  /* PARITY RULE */
+  .parity-rule {
+    font-family: 'Source Sans 3', sans-serif;
+    text-align: center;
+    font-size: 14px;
+    color: var(--dark-teal);
+    background: var(--cream);
+    border-radius: 6px;
+    padding: 18px 24px;
+    margin-top: 24px;
+    line-height: 1.6;
+  }
+  .parity-rule strong { color: var(--orange); }
+
+  /* JUNIOR EXPLORER CALLOUT */
+  .junior-callout {
+    background: var(--deep-navy);
+    border-radius: 8px;
+    padding: 0;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+  }
+  .junior-left {
+    padding: 40px 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .junior-eyebrow {
+    font-family: 'Nunito', sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 6px;
+  }
+  .junior-title {
+    font-family: 'Nunito', sans-serif;
+    font-size: 38px;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1;
+  }
+  .junior-title span { color: var(--gold); }
+  .junior-right {
+    background: #fff;
+    padding: 36px 36px;
+  }
+  .junior-right p {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13.5px;
+    color: var(--ink);
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+  .junior-right p:last-child { margin-bottom: 0; }
+  .junior-right strong { color: var(--dark-teal); }
+
+  /* COLOR SYSTEM */
+  .palette-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .palette-row.accents {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 75%;
+    margin-top: 12px;
+  }
+  .swatch {
+    border-radius: 6px;
+    padding: 16px 10px 10px;
+    height: 90px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .swatch-name {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .swatch-hex {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 9px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 2px;
+  }
+  .swatch.light .swatch-name { color: var(--dark-slate); }
+  .swatch.light .swatch-hex { color: rgba(44,72,76,0.65); }
+  .palette-row-label {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--deep-navy);
+    margin-bottom: 8px;
+  }
+
+  .type-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 18px;
+    margin-top: 50px;
+  }
+  .type-card {
+    border: 1px solid #E4E0D6;
+    border-radius: 6px;
+    padding: 24px 20px;
+    background: #fff;
+  }
+  .type-role {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 12px;
+  }
+  .type-sample-1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--dark-teal);
+    margin-bottom: 6px;
+  }
+  .type-sample-2 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 16px;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .type-sample-3 {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--deep-navy);
+  }
+  .type-name {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11.5px;
+    color: #777;
+    margin-top: 12px;
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+  }
+
+  /* FOOTER */
+  .footer {
+    background: var(--dark-teal);
+    color: rgba(255,255,255,0.6);
+    padding: 50px 0;
+    text-align: center;
+  }
+  .footer p {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12px;
+    line-height: 1.8;
+  }
+  .footer .footer-title {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+
+  @media (max-width: 760px) {
+    .hero h1 { font-size: 40px; }
+    .section-grid, .ba-grid, .tier-row, .type-pair { grid-template-columns: 1fr; }
+    .junior-callout { grid-template-columns: 1fr; }
+    .palette-row { grid-template-columns: repeat(2, 1fr); }
+    .palette-row.accents { grid-template-columns: repeat(2, 1fr); max-width: 100%; }
+    .principle-block { padding: 36px 28px; }
+    .principle-text { font-size: 24px; }
+  }
+  /* BREADCRUMB HEADER (matches pixelsandstitches.vercel.app nav) */
+  .ps-breadcrumb-bar {
+    background: rgb(245, 240, 232);
+    border-bottom: 0.5px solid rgb(138, 176, 154);
+    padding: 10px 20px;
+  }
+  .ps-breadcrumb-inner {
+    max-width: 980px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Zilla Slab', Georgia, serif;
+    font-size: 13px;
+  }
+  .ps-breadcrumb-inner a {
+    color: rgb(58, 107, 82);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ps-breadcrumb-inner a:hover { text-decoration: underline; }
+  .ps-breadcrumb-sep { color: rgb(138, 176, 154); font-size: 11px; }
+  .ps-breadcrumb-current {
+    color: rgb(30, 74, 53);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+</style>
+</head>
+<body>
+
+  <div class="ps-breadcrumb-bar">
+    <div class="ps-breadcrumb-inner">
+      <a href="/">
+        <span aria-hidden="true">&larr;</span> Pixels &amp; Stitches
+      </a>
+      <span class="ps-breadcrumb-sep">&rsaquo;</span>
+      <span class="ps-breadcrumb-current">Beachcrest Newsletter Redesign</span>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="wrap">
+      <div class="hero-eyebrow">Editorial &amp; design system</div>
+      <h1>Modernizing a <em>35-year-old</em><br>community newsletter</h1>
+      <p class="hero-sub">A volunteer-run HOA newsletter, rebuilt section by section &mdash; editorial structure, sourcing policy, pagination logic, and a full visual identity, designed for InDesign production and built out as a working proof of concept.</p>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <div class="hero-meta-label">Publication</div>
+          <div class="hero-meta-value">The Beachcrest Newsletter, quarterly</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="hero-meta-label">Scope</div>
+          <div class="hero-meta-value">Editorial system, brand, pagination, layout</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="hero-meta-label">Format</div>
+          <div class="hero-meta-value">Print, designed for InDesign production</div>
+        </div>
+      </div>
+    </div>
+    <svg class="hero-wave" viewBox="0 0 1000 24" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,12 C83,0 167,24 250,12 C333,0 417,24 500,12 C583,0 667,24 750,12 C833,0 917,24 1000,12 L1000,24 L0,24 Z" fill="#CDCBE3""
+    "/>
+    </svg>
+  </header>
+
+  <main class="wrap">
+
+    <section class="section">
+      <div class="section-eyebrow" style="color:var(--orange);">The starting point</div>
+      <h2>A beloved publication, ready for its next chapter</h2>
+      <p class="section-lede">Established in 1991 by volunteer residents, the newsletter has run continuously for over three decades &mdash; a real institutional achievement for an all-volunteer publication. The goal of this redesign wasn&rsquo;t to fix something broken, but to give that same content room to breathe: clearer hierarchy, more white space, and a structure that makes the newsletter as easy to pick up as it is valuable to read.</p>
+      <div class="problem-quote">
+        &ldquo;Density of information is fine. Density of reading effort is not.&rdquo;
+        <cite>&mdash; the guiding principle behind the redesign</cite>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0;">
+      <div class="section-eyebrow" style="color:var(--teal);">Editorial structure</div>
+      <h2>Six sections, each with a job</h2>
+      <p class="section-lede">Every piece of content was sorted against a clear test: does this belong in the official record, the events calendar, a neighbor's shared knowledge, a curated list, or the kids' page? Ambiguous content &mdash; like a recurring "interest" column that blurred nature writing with lifestyle tips &mdash; was deliberately merged once testing showed readers couldn't tell the two apart anyway.</p>
+
+      <div class="section-grid">
+        <div class="sys-card">
+          <div class="sys-card-top" style="background:var(--dark-teal);"></div>
+          <div class="sys-card-body">
+            <div class="sys-card-tag" style="color:var(--dark-teal);">01 &middot; Always 1 page</div>
+            <div class="sys-card-title">Community News</div>
+            <div class="sys-card-desc">The official record, told as a gist, not a transcript. Compact cards carry one bolded fact each, with a consistent pointer to the full record online.</div>
+          </div>
+        </div>
+        <div class="sys-card">
+          <div class="sys-card-top" style="background:var(--orange);"></div>
+          <div class="sys-card-body">
+            <div class="sys-card-tag" style="color:var(--orange);">02 &middot; Flexes with the calendar</div>
+            <div class="sys-card-title">Around Beachcrest</div>
+            <div class="sys-card-desc">Events, gatherings, volunteer days. The highest-energy section &mdash; real photography, date badges, organizer voice.</div>
+          </div>
+        </div>
+        <div class="sys-card">
+          <div class="sys-card-top" style="background:var(--deep-lavender);"></div>
+          <div class="sys-card-body">
+            <div class="sys-card-tag" style="color:var(--deep-lavender);">03 &middot; Flexes with content</div>
+            <div class="sys-card-title">Neighbor Notes</div>
+            <div class="sys-card-desc">Resident-shared knowledge, rooted in season and place &mdash; governed by an explicit sourcing standard (see below).</div>
+          </div>
+        </div>
+        <div class="sys-card">
+          <div class="sys-card-top" style="background:var(--teal);"></div>
+          <div class="sys-card-body">
+            <div class="sys-card-tag" style="color:var(--teal);">04 &middot; Always 1 page</div>
+            <div class="sys-card-title">Around the Region</div>
+            <div class="sys-card-desc">A tight, scannable listings grid &mdash; curated, not authored, and the design says so honestly.</div>
+          </div>
+        </div>
+        <div class="sys-card">
+          <div class="sys-card-top" style="background:var(--gold);"></div>
+          <div class="sys-card-body">
+            <div class="sys-card-tag" style="color:var(--gold);">05 &middot; Always 2 pages</div>
+            <div class="sys-card-title">Junior Explorer</div>
+            <div class="sys-card-desc">A standalone tear-out for young readers, built to survive being physically separated from the issue.</div>
+          </div>
+        </div>
+        <div class="sys-card">
+          <div class="sys-card-top" style="background:var(--deep-navy);"></div>
+          <div class="sys-card-body">
+            <div class="sys-card-tag" style="color:var(--deep-navy);">06 &middot; Always 1 page</div>
+            <div class="sys-card-title">Directory &amp; Planner</div>
+            <div class="sys-card-desc">Board contacts and the full quarter calendar &mdash; the most-referenced page, placed on the back cover by design.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0;">
+      <div class="principle-block">
+        <div class="principle-tag">The governing principle</div>
+        <div class="principle-text">It&rsquo;s fine for a page to hold a lot of information &mdash; as long as no single piece of information takes more than a glance to find.</div>
+        <div class="principle-sub">This is what makes a dense civic page (an Annual Meeting recap, say) feel approachable rather than exhausting: pull the load-bearing fact &mdash; a date, a percentage, a deadline &mdash; out of the sentence and make it impossible to miss, even at a glance.</div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0;">
+      <div class="section-eyebrow" style="color:var(--orange);">Before &amp; after</div>
+      <h2>Same content, clearer hierarchy</h2>
+      <p class="section-lede">Governance content &mdash; meeting minutes, budgets, bylaw updates &mdash; carries real obligations for residents, especially around an Annual Meeting vote. The challenge wasn't trimming the content, it was finding a layout where the facts that matter most don't get lost in the facts that matter eventually.</p>
+      <div class="ba-grid">
+        <div class="ba-card">
+          <div class="ba-header" style="background:var(--teal);">Before &middot; full-page articles</div>
+          <div class="ba-body">
+            <p>Governance content ran as four separate full pages: Annual Meeting notice, bylaw proposal text, a legal explainer, and a standalone FAQ &mdash; each formatted as continuous paragraph prose.</p>
+            <p>Every fact carried equal visual weight, so finding the one date or number that mattered meant reading the whole page.</p>
+          </div>
+        </div>
+        <div class="ba-card">
+          <div class="ba-header" style="background:var(--deep-lavender);">After &middot; one page, six gist cards</div>
+          <div class="ba-body">
+            <p>One page. Six compact cards, each with a bolded stat and a consistent "full details &rarr; beachcrest.org" link, plus a three-option "how to vote" strip.</p>
+            <p>Every voting-critical fact survives: the date, the quorum, what's on the ballot, and all valid ways to participate &mdash; each visible at a glance.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0;">
+      <div class="section-eyebrow" style="color:var(--teal);">Sourcing standard</div>
+      <h2>A real editorial policy, not just a vibe</h2>
+      <p class="section-lede">Neighbor Notes runs on a transparent rule, written to be handed to any future contributor.</p>
+      <div class="problem-quote" style="border-left-color:var(--teal); font-size:24px;">
+        &ldquo;If it's written and acknowledges there's more information out there &mdash; linking to it or giving credit &mdash; it's fine to contribute. Otherwise, it's just filling pages.&rdquo;
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0;">
+      <div class="section-eyebrow" style="color:var(--orange);">Production logic</div>
+      <h2>Pagination as a system, not a guess</h2>
+      <p class="section-lede">Six pages are fixed every issue. Two sections &mdash; Around Beachcrest and Neighbor Notes &mdash; are allowed to flex, but only together, which keeps every issue printable at an even, saddle-stitch-friendly page count.</p>
+
+      <div class="tier-row">
+        <div class="tier-box">
+          <div class="tier-label">Light issue</div>
+          <div class="tier-num">8</div>
+          <div class="tier-unit">total pages</div>
+        </div>
+        <div class="tier-box">
+          <div class="tier-label">Standard issue</div>
+          <div class="tier-num">10</div>
+          <div class="tier-unit">total pages</div>
+        </div>
+        <div class="tier-box">
+          <div class="tier-label">Heavy issue</div>
+          <div class="tier-num">12</div>
+          <div class="tier-unit">total pages</div>
+        </div>
+      </div>
+
+      <div class="parity-rule">The parity rule: <strong>Around Beachcrest and Neighbor Notes must always match</strong> &mdash; both odd, or both even &mdash; so the issue total stays printable without rigid, prescriptive page limits per section.</div>
+    </section>
+
+    <section class="section" style="padding-top:0;">
+      <div class="section-eyebrow" style="color:var(--teal);">A tear-out, not a footnote</div>
+      <h2>Junior Explorer</h2>
+      <div class="junior-callout">
+        <div class="junior-left">
+          <div class="junior-eyebrow">Beachcrest</div>
+          <div class="junior-title">Junior <span>Explorer</span></div>
+        </div>
+        <div class="junior-right">
+          <p><strong>Side one</strong> carries the masthead and a kid-pitched feature, loosely echoing whatever the adult issue covers &mdash; with light invitations back into the newsletter, never dependencies on it.</p>
+          <p><strong>Side two</strong> is fully self-sufficient: a nature callout, a hands-on activity, a brain quiz, and a blank slot for kid-submitted art &mdash; built to survive on a fridge with zero surrounding context.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0;">
+      <div class="section-eyebrow" style="color:var(--teal);">Visual identity</div>
+      <h2>A palette and type system built for print</h2>
+      <p class="section-lede">Specified down to the hex value and the InDesign-ready font pairing, so the system survives the handoff from screen mockup to printed page.</p>
+
+      <div class="palette-row-label">Main palette</div>
+      <div class="palette-row">
+        <div class="swatch" style="background:var(--deep-navy);">
+          <div class="swatch-name">Deep navy</div>
+          <div class="swatch-hex">#1A445D</div>
+        </div>
+        <div class="swatch" style="background:var(--dark-teal);">
+          <div class="swatch-name">Dark teal</div>
+          <div class="swatch-hex">#285056</div>
+        </div>
+        <div class="swatch" style="background:var(--teal);">
+          <div class="swatch-name">Teal</div>
+          <div class="swatch-hex">#4C7077</div>
+        </div>
+        <div class="swatch" style="background:var(--orange);">
+          <div class="swatch-name">Orange</div>
+          <div class="swatch-hex">#D87D38</div>
+        </div>
+      </div>
+
+      <div class="palette-row-label" style="margin-top:24px;">Accents</div>
+      <div class="palette-row accents">
+        <div class="swatch light" style="background:var(--gold);">
+          <div class="swatch-name">Gold</div>
+          <div class="swatch-hex">#F6bF4E</div>
+        </div>
+        <div class="swatch light" style="background:var(--sage);">
+          <div class="swatch-name">Sage</div>
+          <div class="swatch-hex">#B4CBBF</div>
+        </div>
+        <div class="swatch light" style="background:var(--lavender);">
+          <div class="swatch-name">Lavender</div>
+          <div class="swatch-hex">#9692BF</div>
+        </div>
+      </div>
+      <p style="font-family:'Source Sans 3',sans-serif; font-size:12px; color:#777; margin-top:18px; max-width:600px; line-height:1.6;">Four muted, structural colors carry the page; three softer accents &mdash; gold, sage, and lavender &mdash; do the lighter work: highlights, secondary tags, and moments of warmth without competing with the headlines.</p>
+
+      <div class="type-pair">
+        <div class="type-card">
+          <div class="type-role">Display &amp; headlines</div>
+          <div class="type-sample-1">Beachcrest Newsletter</div>
+          <div class="type-name">Playfair Display</div>
+        </div>
+        <div class="type-card">
+          <div class="type-role">Body text</div>
+          <div class="type-sample-2">A quarterly newsletter, built by neighbors.</div>
+          <div class="type-name">Source Serif 4</div>
+        </div>
+        <div class="type-card">
+          <div class="type-role">Labels &amp; captions</div>
+          <div class="type-sample-3">Community News</div>
+          <div class="type-name">Source Sans 3</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer-title">Beachcrest Newsletter Case Study</div>
+      <p>Editorial system, sourcing policy, pagination logic, and visual identity &mdash; developed through iterative design collaboration, 2026.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

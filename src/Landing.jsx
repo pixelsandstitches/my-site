@@ -13,6 +13,18 @@ const C = {
 
 const projects = [
   {
+  title: 'Pixels & Stitches Brand Identity',
+  description: 'A full visual system for a modern website.',
+  path: '/pixels_and_stitches_style_guide.html',
+  isExternal: true,
+  tag: 'Brand Identity',
+  cardBg: '#8C8C2A',
+    tagColor: '#B8D9C2',
+  titleColor: '#CEC8BE',
+  descColor: '#a8c4b0',
+  arrowColor: '#B8D9C2',
+  },
+  {
     title: 'Weekly Meal Plan',
     description: 'A personal tool for planning and tracking meals through the week.',
     path: '/meal-plan',
@@ -24,26 +36,26 @@ const projects = [
     arrowColor: '#B8D9C2',
   },
   {
-    title: 'Beachcrest — Google Site Redesign',
+    title: 'Beachcrest Website — Google Site Redesign',
     description: 'The existing Beachcrest community association website, turned Google Site for Board Member Review.',
     path: '/beachcrest',
     tag: 'Site Redesign',
     cardBg: '#B8A0C8',
-    tagColor: '#3d2a4a',
+    tagColor: '#5a3d70',
     titleColor: '#2a1a38',
     descColor: '#5a3d70',
     arrowColor: '#3d2a4a',
   },
   {
-    title: 'Beachcrest — Full Redesign',
+    title: 'Beachcrest Website — Full Redesign',
     description: 'A fresh, modern take on the Beachcrest neighborhood site -- just for comparison.',
     path: '/beachcrest-redesign',
     tag: 'Site Redesign',
     cardBg: '#CEC8BE',
-    tagColor: '#6B5550',
+    tagColor: 'rgb(62 45 41)',
     titleColor: '#3A5C3E',
-    descColor: '#6B5550',
-    arrowColor: '#3A5C3E',
+    descColor: 'rgb(62 45 41)',
+    arrowColor: 'rgb(62 45 41)',
   },
   {
   title: 'Workout Builder',
@@ -52,6 +64,18 @@ const projects = [
   tag: 'Tool',
   cardBg: '#3A5C3E',
   tagColor: '#B8D9C2',
+  titleColor: '#CEC8BE',
+  descColor: '#a8c4b0',
+  arrowColor: '#B8D9C2',
+},
+{
+  title: 'Newsletter Redesign',
+  description: 'A full visual system for a community quarterly print newsletter.',
+  path: '/beachcrest_view_case_study.html',
+  isExternal: true,
+  tag: 'Brand Identity',
+  cardBg: '#8C8C2A',
+    tagColor: '#B8D9C2',
   titleColor: '#CEC8BE',
   descColor: '#a8c4b0',
   arrowColor: '#B8D9C2',
@@ -122,8 +146,8 @@ export default function Landing() {
 
       {/* Cards */}
       <main style={{ maxWidth: '860px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '18px' }}>
-        {projects.map((p) => (
-          <Link key={p.path} to={p.path} style={{ textDecoration: 'none', color: 'inherit' }}>
+        {projects.map((p) => {
+          const card = (
             <div className="ps-card" style={{ backgroundColor: p.cardBg, borderRadius: '8px', padding: '28px 26px 24px', display: 'flex', flexDirection: 'column', gap: '10px', minHeight: '200px' }}>
               <span style={{ fontSize: '9px', letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 600, color: p.tagColor }}>
                 {p.tag}
@@ -139,8 +163,18 @@ export default function Landing() {
                 <span className="ps-arrow" style={{ color: p.arrowColor, fontSize: '18px' }}>→</span>
               </div>
             </div>
-          </Link>
-        ))}
+          )
+
+          return p.isExternal ? (
+            <a key={p.path} href={p.path} style={{ textDecoration: 'none', color: 'inherit' }}>
+              {card}
+            </a>
+          ) : (
+            <Link key={p.path} to={p.path} style={{ textDecoration: 'none', color: 'inherit' }}>
+              {card}
+            </Link>
+          )
+        })}
       </main>
 
       {/* Footer */}

@@ -240,7 +240,53 @@
 
   .info-box strong { color: var(--ps-cactus); }
   .info-box em { color: var(--ps-olive); font-style: italic; }
+
+  /* BREADCRUMB HEADER (matches pixelsandstitches.vercel.app nav) */
+  .ps-breadcrumb-bar {
+    background: var(--ps-bg);
+    border-bottom: 0.5px solid rgb(138, 176, 154);
+    padding: 10px 20px;
+  }
+  .ps-breadcrumb-inner {
+    max-width: 980px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Zilla Slab', Georgia, serif;
+    font-size: 13px;
+  }
+  .ps-breadcrumb-inner a {
+    color: rgb(58, 107, 82);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ps-breadcrumb-inner a:hover { text-decoration: underline; }
+  .ps-breadcrumb-sep { color: rgb(138, 176, 154); font-size: 11px; }
+  .ps-breadcrumb-current {
+    color: rgb(30, 74, 53);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 </style>
+
+<div class="ps-breadcrumb-bar">
+  <div class="ps-breadcrumb-inner">
+    <a href="/">
+      <span aria-hidden="true">&larr;</span> Pixels &amp; Stitches
+    </a>
+    <span class="ps-breadcrumb-sep">&rsaquo;</span>
+    <span class="ps-breadcrumb-current">Pixels & Stitches Brand Identity</span>
+  </div>
+</div>
 
 <div class="guide">
 
